@@ -4,8 +4,6 @@
  */
 package main;
 
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import ui.form.MainForm;
 
 /**
@@ -14,8 +12,7 @@ import ui.form.MainForm;
  */
 public class Start {
 
-    public static void main(String[] args) throws ClassNotFoundException, IllegalAccessException, InstantiationException, UnsupportedLookAndFeelException {
-        UIManager.setLookAndFeel("de.javasoft.plaf.synthetica.simple2d.Synthetica2DLookAndFeel");
+    public static void main(String[] args) {
         new MainForm().setVisible(true);
     }
 }
