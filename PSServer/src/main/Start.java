@@ -4,6 +4,11 @@
  */
 package main;
 
+import com.formdev.flatlaf.themes.FlatMacLightLaf;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import ui.form.MainForm;
 
 /**
@@ -13,6 +18,11 @@ import ui.form.MainForm;
 public class Start {
 
     public static void main(String[] args) {
-        new MainForm().setVisible(true);
+        try {
+            UIManager.setLookAndFeel(new FlatMacLightLaf());
+            new MainForm().setVisible(true);
+        } catch (UnsupportedLookAndFeelException ex) {
+            Logger.getLogger(Start.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

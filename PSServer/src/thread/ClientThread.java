@@ -36,6 +36,7 @@ public class ClientThread extends Thread {
 
     @Override
     public void run() {
+        if(!socket.isClosed())
         while (signal) {
             try {
                 Request request = (Request) recеiver.receive();
@@ -48,23 +49,20 @@ public class ClientThread extends Thread {
                             administrator = (Administrator) response.getResult();
 
                             boolean active = Controller.getInstance().isLogged(this.administrator);
-                            
+
                             if (active) {
                                 response.setException(new Exception("Administrator is already logged"));
                             } else {
                                 Controller.getInstance().addActiveAdministrator(this);
                                 Controller.getInstance().getMainForm().addLoggedAdministrator(administrator);
                             }
-                            sender.send(response);
                             break;
-
-                        default:
-                            throw new AssertionError();
                     }
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     response.setException(ex);
                 }
+                sender.send(response);
             } catch (Exception ex) {
                 Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
             }

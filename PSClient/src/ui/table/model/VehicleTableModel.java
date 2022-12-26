@@ -57,12 +57,12 @@ public class VehicleTableModel extends AbstractTableModel {
         return columnNames[column];
     }
 
-    /*@Override
+    @Override
     public Class<?> getColumnClass(int columnIndex) {
         if(columnIndex == 3)
             return Boolean.class;
         return Object.class;
-    }*/
+    }
 
     public List<Vehicle> getVehicles() {
         return vehicles;
