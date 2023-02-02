@@ -5,10 +5,16 @@
 package controller;
 
 import databasebroker.AdministratorDBBroker;
+import databasebroker.TypeOfVehicleDBBroker;
+import databasebroker.VehicleDBBroker;
 import domain.Administrator;
+import domain.TypeOfVehicle;
+import domain.Vehicle;
 import java.util.ArrayList;
 import java.util.List;
 import repository.impl.RepositoryDBAdministrator;
+import repository.impl.RepositoryDBTypeOfVehicle;
+import repository.impl.RepositoryDBVehicle;
 import thread.ClientThread;
 import ui.form.MainForm;
 
@@ -23,10 +29,14 @@ public class Controller {
     private List<ClientThread> activeClients;
 
     private final AdministratorDBBroker repositoryAdministrator;
+    private final VehicleDBBroker repositoryVehicle;
+    private final TypeOfVehicleDBBroker repositoryTypeOfVehicle;
 
     private Controller() {
         this.activeClients = new ArrayList<>();
         this.repositoryAdministrator = new RepositoryDBAdministrator();
+        this.repositoryVehicle = new RepositoryDBVehicle();
+        this.repositoryTypeOfVehicle = new RepositoryDBTypeOfVehicle();
     }
 
     public static Controller getInstance() {
@@ -43,7 +53,7 @@ public class Controller {
     public void setMainForm(MainForm mainForm) {
         this.mainForm = mainForm;
     }
-    
+
     public boolean isLogged(Administrator administrator) {
         for (ClientThread activeClient : activeClients) {
             if (activeClient.getAdministrator().equals(administrator)) {
@@ -54,10 +64,10 @@ public class Controller {
         return false;
     }
 
-    public void addActiveAdministrator(ClientThread client){
+    public void addActiveAdministrator(ClientThread client) {
         activeClients.add(client);
     }
-    
+
     public Administrator login(String username, String password) throws Exception {
         List<Administrator> administrators = repositoryAdministrator.getAll();
         for (Administrator administrator : administrators) {
@@ -74,6 +84,26 @@ public class Controller {
 
     public void setActiveClients(List<ClientThread> activeClients) {
         this.activeClients = activeClients;
+    }
+
+    public List<Vehicle> getAllVehicles() {
+        return repositoryVehicle.getAll();
+    }
+
+    public List<TypeOfVehicle> getAllTypes() {
+        return repositoryTypeOfVehicle.getAll();
+    }
+
+    public void deleteVehicle(Vehicle vehicle) throws Exception {
+        repositoryVehicle.delete(vehicle);
+    }
+
+    public void saveVehicle(Vehicle vehicle) throws Exception {
+        repositoryVehicle.add(vehicle);
+    }
+
+    public void updateVehicle(Vehicle vehicle) throws Exception {
+        repositoryVehicle.update(vehicle);
     }
 
 }

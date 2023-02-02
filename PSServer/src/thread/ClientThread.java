@@ -11,6 +11,7 @@ import communication.Recеiver;
 import communication.Request;
 import communication.Response;
 import controller.Controller;
+import domain.Vehicle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,9 +21,9 @@ import java.util.logging.Logger;
  */
 public class ClientThread extends Thread {
 
-    private Socket socket;
-    private Sender sender;
-    private Recеiver recеiver;
+    private final Socket socket;
+    private final Sender sender;
+    private final Recеiver recеiver;
     private boolean signal;
     private Administrator administrator;
 
@@ -36,35 +37,51 @@ public class ClientThread extends Thread {
 
     @Override
     public void run() {
-        if(!socket.isClosed())
-        while (signal) {
-            try {
-                Request request = (Request) recеiver.receive();
-                Response response = new Response();
+        if (!socket.isClosed()) {
+            while (signal) {
                 try {
-                    switch (request.getOperation()) {
-                        case LOG_IN:
-                            Administrator admin = (Administrator) request.getData();
-                            response.setResult(Controller.getInstance().login(admin.getUsername(), admin.getPassword()));
-                            administrator = (Administrator) response.getResult();
+                    Request request = (Request) recеiver.receive();
+                    Response response = new Response();
+                    try {
+                        switch (request.getOperation()) {
+                            case LOG_IN:
+                                Administrator admin = (Administrator) request.getData();
+                                response.setResult(Controller.getInstance().login(admin.getUsername(), admin.getPassword()));
+                                administrator = (Administrator) response.getResult();
 
-                            boolean active = Controller.getInstance().isLogged(this.administrator);
+                                boolean active = Controller.getInstance().isLogged(this.administrator);
 
-                            if (active) {
-                                response.setException(new Exception("Administrator is already logged"));
-                            } else {
-                                Controller.getInstance().addActiveAdministrator(this);
-                                Controller.getInstance().getMainForm().addLoggedAdministrator(administrator);
-                            }
-                            break;
+                                if (active) {
+                                    response.setException(new Exception("Administrator is already logged"));
+                                } else {
+                                    Controller.getInstance().addActiveAdministrator(this);
+                                    Controller.getInstance().getMainForm().addLoggedAdministrator(administrator);
+                                }
+                                break;
+                            case GET_ALL_VEHICLES:
+                                response.setResult(Controller.getInstance().getAllVehicles());
+                                break;
+                            case GET_ALL_TYPES:
+                                response.setResult(Controller.getInstance().getAllTypes());
+                                break;
+                            case DELETE_VEHICLE:
+                                Controller.getInstance().deleteVehicle((Vehicle) request.getData());
+                                break;
+                            case ADD_VEHICLE:
+                                Controller.getInstance().saveVehicle((Vehicle) request.getData());
+                                break;
+                            case UPDATE_VEHICLE:
+                                Controller.getInstance().updateVehicle((Vehicle) request.getData());
+                                break;
+                        }
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                        response.setException(ex);
                     }
+                    sender.send(response);
                 } catch (Exception ex) {
-                    ex.printStackTrace();
-                    response.setException(ex);
+                    Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                sender.send(response);
-            } catch (Exception ex) {
-                Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
 

@@ -9,5 +9,10 @@ package enumeration;
  * @author Somika
  */
 public enum Operation {
-    LOG_IN;
+    LOG_IN, 
+    GET_ALL_VEHICLES, 
+    GET_ALL_TYPES, 
+    DELETE_VEHICLE, 
+    ADD_VEHICLE,
+    UPDATE_VEHICLE;
 }

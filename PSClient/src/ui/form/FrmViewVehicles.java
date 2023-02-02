@@ -4,29 +4,27 @@
  */
 package ui.form;
 
-import consts.VehicleFormmModes;
+import consts.VehicleFormModes;
+import controller.Controller;
 import domain.TypeOfVehicle;
 import domain.Vehicle;
 import ui.table.model.VehicleTableModel;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import repository.impl.RepositoryDBTypeOfVehicle;
-import repository.impl.RepositoryDBVehicle;
 
 /**
  *
  * @author Somika
  */
 public class FrmViewVehicles extends javax.swing.JFrame {
-
-    private RepositoryDBVehicle repositoryDBVehicle;
     private List<Vehicle> vehicles;
 
     public FrmViewVehicles() {
         initComponents();
-        repositoryDBVehicle = new RepositoryDBVehicle();
         vehicles = new ArrayList<>();
         populateForm();
     }
@@ -120,18 +118,21 @@ public class FrmViewVehicles extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Morate selektovati red", "Greska", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
-        List<Vehicle> vehicles = repositoryDBVehicle.getAll();
-        new FrmVehicle(vehicles.get(selectedRow), this, VehicleFormmModes.VIEW).setVisible(true);
+        new FrmVehicle(vehicles.get(selectedRow), this, VehicleFormModes.VIEW).setVisible(true);
     }//GEN-LAST:event_btnDetailActionPerformed
 
     private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
-        vehicles = repositoryDBVehicle.getAll();
-        tblVehicles.setModel(new VehicleTableModel(vehicles));
-        TypeOfVehicle tov = (TypeOfVehicle) jcbTypeOfVehicles.getSelectedItem();
+        try {
+            vehicles = Controller.getInstance().getAllVehicles();
 
-        List<Vehicle> filters = ((VehicleTableModel) tblVehicles.getModel()).filter(tov);
-        tblVehicles.setModel(new VehicleTableModel(filters));
+            tblVehicles.setModel(new VehicleTableModel(vehicles));
+            TypeOfVehicle tov = (TypeOfVehicle) jcbTypeOfVehicles.getSelectedItem();
+
+            List<Vehicle> filters = ((VehicleTableModel) tblVehicles.getModel()).filter(tov);
+            tblVehicles.setModel(new VehicleTableModel(filters));
+        } catch (Exception ex) {
+            Logger.getLogger(FrmViewVehicles.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnFilterActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
@@ -149,19 +150,24 @@ public class FrmViewVehicles extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void populateForm() {
-        vehicles = repositoryDBVehicle.getAll();
-        tblVehicles.setModel(new VehicleTableModel(vehicles));
+        try {
+            vehicles = Controller.getInstance().getAllVehicles();
+            tblVehicles.setModel(new VehicleTableModel(vehicles));
 
-        jcbTypeOfVehicles.setModel(new DefaultComboBoxModel((new RepositoryDBTypeOfVehicle().getAll()).toArray()));
-        jcbTypeOfVehicles.setSelectedIndex(-1);
+            List<TypeOfVehicle> types = Controller.getInstance().getAllTypes();
+            jcbTypeOfVehicles.setModel(new DefaultComboBoxModel(types.toArray()));
+            jcbTypeOfVehicles.setSelectedIndex(-1);
+        } catch (Exception ex) {
+            Logger.getLogger(FrmViewVehicles.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void remove(Vehicle vehicle) {
         ((VehicleTableModel) tblVehicles.getModel()).removeVehicle(vehicle);
     }
 
-    public void update() {
-        ((VehicleTableModel) tblVehicles.getModel()).setVehicles(repositoryDBVehicle.getAll());
+    public void update() throws Exception {
+        ((VehicleTableModel) tblVehicles.getModel()).setVehicles(Controller.getInstance().getAllVehicles());
         ((VehicleTableModel) tblVehicles.getModel()).update();
     }
 }

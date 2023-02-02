@@ -4,8 +4,7 @@
  */
 package ui.form;
 
-import consts.VehicleFormmModes;
-import java.net.Socket;
+import consts.VehicleFormModes;
 
 /**
  *
@@ -13,12 +12,9 @@ import java.net.Socket;
  */
 public class FrmMain extends javax.swing.JFrame {
 
-    private Socket socket;
-
-    public FrmMain(Socket socket) {
+    public FrmMain() {
         initComponents();
         setLocationRelativeTo(null);
-        this.socket = socket;
     }
 
     @SuppressWarnings("unchecked")
@@ -86,7 +82,7 @@ public class FrmMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
-        new FrmVehicle(VehicleFormmModes.ADD).setVisible(true);
+        new FrmVehicle(VehicleFormModes.ADD).setVisible(true);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
 

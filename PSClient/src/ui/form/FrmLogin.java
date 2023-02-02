@@ -4,21 +4,12 @@
  */
 package ui.form;
 
-import communication.Sender;
-import communication.Recеiver;
-import communication.Request;
-import communication.Response;
+import controller.Controller;
 import domain.Administrator;
-import enumeration.Operation;
+import java.awt.Color;
 import java.awt.Image;
-import java.io.IOException;
-import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import settings.ConnectionConfig;
 
 /**
  *
@@ -26,21 +17,10 @@ import settings.ConnectionConfig;
  */
 public class FrmLogin extends javax.swing.JFrame {
 
-    private Socket socket;
-    private Sender sender;
-    private Recеiver recеiver;
-
     public FrmLogin() {
         initComponents();
         scaleImage();
         setLocationRelativeTo(null);
-        try {
-            socket = new Socket(ConnectionConfig.getInstance().getProperty("address"), Integer.parseInt(ConnectionConfig.getInstance().getProperty("port")));
-            sender = new Sender(socket);
-            recеiver = new Recеiver(socket);
-        } catch (IOException ex) {
-            Logger.getLogger(FrmLogin.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 
     @SuppressWarnings("unchecked")
@@ -54,8 +34,10 @@ public class FrmLogin extends javax.swing.JFrame {
         jCheckBox1 = new javax.swing.JCheckBox();
         jButton1 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 204, 255));
 
         jLabel1.setText("Korisnicko ime:");
 
@@ -89,12 +71,15 @@ public class FrmLogin extends javax.swing.JFrame {
 
         jLabel3.setText("jLabel3");
 
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 3, 36)); // NOI18N
+        jLabel4.setText("LOGIN");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
+                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -109,12 +94,17 @@ public class FrmLogin extends javax.swing.JFrame {
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txtUser)
                             .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(63, Short.MAX_VALUE))
+                .addContainerGap(62, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(137, 137, 137))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
                 .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -128,7 +118,7 @@ public class FrmLogin extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCheckBox1)
                     .addComponent(jButton1))
-                .addContainerGap(33, Short.MAX_VALUE))
+                .addGap(17, 17, 17))
         );
 
         pack();
@@ -146,31 +136,25 @@ public class FrmLogin extends javax.swing.JFrame {
         String username = txtUser.getText().trim();
         String password = new String(txtPassword.getPassword());
 
-        // validation toDo
-        Administrator admin = new Administrator();
-        admin.setUsername(username);
-        admin.setPassword(password);
-
         try {
-            Request request = new Request(Operation.LOG_IN, admin);
-            sender.send(request);
-
-            Response response = (Response) recеiver.receive();
-
-            if (response.getException() == null) {
-                JOptionPane.showMessageDialog(this, "Login success. Welcome " + ((Administrator) response.getResult()).getUsername());
-                (new FrmMain(socket)).setVisible(true);
-                this.dispose();
-            } else {
-                JOptionPane.showMessageDialog(this, "Invalid username or password.", "ERROR", JOptionPane.ERROR_MESSAGE);
-
+            Administrator administrator = Controller.getInstance().login(username, password);
+            if (administrator == null) {
+                JOptionPane.showMessageDialog(this, "Invalid username or password", "", JOptionPane.ERROR_MESSAGE);
+                resetForm();
+                return;
             }
 
+            if (administrator.getUsername().equals("logged")) {
+                JOptionPane.showMessageDialog(this, "Administrator is already logged!", "", JOptionPane.ERROR_MESSAGE);
+                resetForm();
+                return;
+            }
+            JOptionPane.showMessageDialog(this, "Login success. Welcome " + administrator.getUsername());
+            new FrmMain().setVisible(true);
+            this.dispose();
         } catch (Exception ex) {
-            Logger.getLogger(FrmLogin.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, ex.getMessage());
         }
-
-
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
@@ -188,6 +172,7 @@ public class FrmLogin extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUser;
     // End of variables declaration//GEN-END:variables
@@ -198,5 +183,10 @@ public class FrmLogin extends javax.swing.JFrame {
         Image imgScale = img.getScaledInstance(jLabel3.getWidth(), jLabel3.getWidth(), Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(imgScale);
         jLabel3.setIcon(scaledIcon);
+    }
+
+    private void resetForm() {
+        txtUser.setText("");
+        txtPassword.setText("");
     }
 }

@@ -8,7 +8,7 @@ package consts;
  *
  * @author Somika
  */
-public class VehicleFormmModes {
+public class VehicleFormModes {
     public static final int VIEW = 0;
     public static final int ADD = 1;
 }

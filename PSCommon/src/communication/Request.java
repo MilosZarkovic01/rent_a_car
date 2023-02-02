@@ -24,6 +24,10 @@ public class Request implements Serializable {
         this.data = data;
     }
 
+    public Request(Operation operation) {
+        this.operation = operation;
+    }
+
     public Operation getOperation() {
         return operation;
     }

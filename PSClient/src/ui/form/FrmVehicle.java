@@ -4,31 +4,29 @@
  */
 package ui.form;
 
-import consts.VehicleFormmModes;
+import consts.VehicleFormModes;
 import domain.TypeOfVehicle;
 import domain.Vehicle;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
-import repository.impl.RepositoryDBTypeOfVehicle;
-import repository.impl.RepositoryDBVehicle;
+import controller.Controller;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Somika
  */
 public class FrmVehicle extends javax.swing.JFrame {
-
+    
     private Vehicle vehicle;
     private int mode;
     private FrmViewVehicles frmViewVehicles;
-
+    
     public FrmVehicle() {
         initComponents();
     }
-
+    
     public FrmVehicle(Vehicle vehicle, FrmViewVehicles frmViewVehicles, int mode) {
         initComponents();
         this.vehicle = vehicle;
@@ -37,13 +35,13 @@ public class FrmVehicle extends javax.swing.JFrame {
         prepareForm();
         populateForm();
     }
-
-    FrmVehicle(int modul) {
+    
+    public FrmVehicle(int mode) {
         initComponents();
-        this.mode = modul;
+        this.mode = mode;
         prepareForm();
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -240,19 +238,20 @@ public class FrmVehicle extends javax.swing.JFrame {
      }//GEN-LAST:event_btnEditActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        int choice = JOptionPane.showConfirmDialog(this, "Da li ste sigurni?", "Brisanje vozila", JOptionPane.YES_NO_OPTION);
-        if (choice == JOptionPane.NO_OPTION) {
-            return;
-        } else {
-            
-            try {
-                new RepositoryDBVehicle().delete(vehicle);
+        try {
+            int choice = JOptionPane.showConfirmDialog(this, "Da li ste sigurni?", "Brisanje vozila", JOptionPane.YES_NO_OPTION);
+            if (choice == JOptionPane.NO_OPTION) {
+                return;
+            }
+            if (Controller.getInstance().deleteVehicle(vehicle)) {
+                JOptionPane.showMessageDialog(this, "Uspesno ste obrisali vozilo!");
                 frmViewVehicles.remove(vehicle);
-            } catch (Exception ex) {
-                Logger.getLogger(FrmVehicle.class.getName()).log(Level.SEVERE, null, ex);
             }
             this.dispose();
+        } catch (Exception ex) {
+            Logger.getLogger(FrmVehicle.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnCancleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancleActionPerformed
@@ -262,20 +261,22 @@ public class FrmVehicle extends javax.swing.JFrame {
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         try {
             //validate
-            new RepositoryDBVehicle().add(getInsertedData());
-            JOptionPane.showMessageDialog(this, "Uspesno cuvanje!", "", JOptionPane.PLAIN_MESSAGE);
-            
+            if (Controller.getInstance().saveVehicle(getInputData())) {
+                JOptionPane.showMessageDialog(this, "Uspesno ste sacuvali vozilo!");
+            }
         } catch (Exception ex) {
             Logger.getLogger(FrmVehicle.class.getName()).log(Level.SEVERE, null, ex);
         }
+        populateForm();
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         try {
             //validate
-            new RepositoryDBVehicle().update(getInsertedData());
-            JOptionPane.showMessageDialog(this, "Uspesno azuriranje!", "", JOptionPane.PLAIN_MESSAGE);
-            frmViewVehicles.update();
+            if (Controller.getInstance().updateVehicle(getInputData())) {
+                JOptionPane.showMessageDialog(this, "Uspesno azuriranje!");
+                frmViewVehicles.update();
+            }
         } catch (Exception ex) {
             Logger.getLogger(FrmVehicle.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -307,11 +308,11 @@ public class FrmVehicle extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void prepareForm() {
-
+        
         buttonGroup1.add(jrbYes);
         buttonGroup1.add(jrbNo);
-
-        if (mode == VehicleFormmModes.VIEW) {
+        
+        if (mode == VehicleFormModes.VIEW) {
             btnSave.setVisible(false);
             
             txtId.setEditable(false);
@@ -322,8 +323,8 @@ public class FrmVehicle extends javax.swing.JFrame {
             jrbNo.setEnabled(false);
             jcbTypeOfVehicle.setEnabled(false);
         }
-
-        if (mode == VehicleFormmModes.ADD) {
+        
+        if (mode == VehicleFormModes.ADD) {
             btnDelete.setVisible(false);
             btnUpdate.setVisible(false);
             btnEdit.setVisible(false);
@@ -331,12 +332,16 @@ public class FrmVehicle extends javax.swing.JFrame {
             jLabel2.setVisible(false);
             txtId.setVisible(false);
         }
-        jcbTypeOfVehicle.setModel(new DefaultComboBoxModel((new RepositoryDBTypeOfVehicle().getAll()).toArray()));
+        try {
+            jcbTypeOfVehicle.setModel(new DefaultComboBoxModel(Controller.getInstance().getAllTypes().toArray()));
+        } catch (Exception ex) {
+            Logger.getLogger(FrmVehicle.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-
+    
     private void populateForm() {
-
-        if (mode == VehicleFormmModes.VIEW) {
+        
+        if (mode == VehicleFormModes.VIEW) {
             txtId.setText(vehicle.getId().toString());
             txtBrand.setText(vehicle.getBrand());
             txtModel.setText(vehicle.getModel());
@@ -347,30 +352,32 @@ public class FrmVehicle extends javax.swing.JFrame {
                 jrbNo.setSelected(true);
             }
             jcbTypeOfVehicle.setSelectedItem(vehicle.getTypeOfVehicle());
+        } else if (mode == VehicleFormModes.ADD) {
+            txtBrand.setText("");
+            txtModel.setText("");
+            txtMileage.setText("");
+            jrbNo.setSelected(true);
+            jcbTypeOfVehicle.setSelectedItem(-1);
         }
-
+        
     }
-
-    private Vehicle getInsertedData() {
-        Vehicle vehicle = new Vehicle();
-        if(mode == VehicleFormmModes.VIEW){
-        Long id = Long.parseLong(txtId.getText());
-        vehicle.setId(id);
+    
+    private Vehicle getInputData() {
+        Vehicle inputVehicle = new Vehicle();
+        if (mode == VehicleFormModes.VIEW) {
+            Long id = Long.parseLong(txtId.getText());
+            inputVehicle.setId(id);
         }
-        vehicle.setBrand(txtBrand.getText().trim());
-        vehicle.setModel(txtModel.getText().trim());
-        vehicle.setMileage(Integer.parseInt(txtMileage.getText().trim()));
-
+        inputVehicle.setBrand(txtBrand.getText().trim());
+        inputVehicle.setModel(txtModel.getText().trim());
+        inputVehicle.setMileage(Integer.parseInt(txtMileage.getText().trim()));
+        
         boolean availability;
-        if (jrbYes.isSelected()) {
-            availability = true;
-        } else {
-            availability = false;
-        }
-        vehicle.setAvailability(availability);
-
+        availability = jrbYes.isSelected();
+        inputVehicle.setAvailability(availability);
+        
         TypeOfVehicle tov = (TypeOfVehicle) jcbTypeOfVehicle.getSelectedItem();
-        vehicle.setTypeOfVehicle(tov);
-        return vehicle;
+        inputVehicle.setTypeOfVehicle(tov);
+        return inputVehicle;
     }
 }
