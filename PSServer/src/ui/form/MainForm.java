@@ -18,7 +18,7 @@ public class MainForm extends javax.swing.JFrame {
         initComponents();
         setLocationRelativeTo(null);
         Controller.getInstance().setMainForm(this);
-        setStatus("Server nije pokrenut!", true);
+        setStatus("Server is down!", true);
         prepareTable();
     }
 

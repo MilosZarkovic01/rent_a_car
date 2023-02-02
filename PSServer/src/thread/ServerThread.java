@@ -35,7 +35,7 @@ public class ServerThread extends Thread {
         int port = Integer.parseInt(ConnectionConfig.getInstance().getProperty("port"));
         try {
             serverSocket = new ServerSocket(port);
-            Controller.getInstance().getMainForm().setStatus("Server je pokrenut na portu: " + port, false);
+            Controller.getInstance().getMainForm().setStatus("Server is running on port: " + port, false);
             //System.out.println("Server je pokrenut");
             Socket socket;
             while (signal) {

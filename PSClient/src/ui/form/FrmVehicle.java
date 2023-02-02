@@ -239,12 +239,12 @@ public class FrmVehicle extends javax.swing.JFrame {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         try {
-            int choice = JOptionPane.showConfirmDialog(this, "Da li ste sigurni?", "Brisanje vozila", JOptionPane.YES_NO_OPTION);
+            int choice = JOptionPane.showConfirmDialog(this, "Are you absolutely sure?", "Deleting a vehicle", JOptionPane.YES_NO_OPTION);
             if (choice == JOptionPane.NO_OPTION) {
                 return;
             }
             if (Controller.getInstance().deleteVehicle(vehicle)) {
-                JOptionPane.showMessageDialog(this, "Uspesno ste obrisali vozilo!");
+                JOptionPane.showMessageDialog(this, "The vehicle was successfully deleted!");
                 frmViewVehicles.remove(vehicle);
             }
             this.dispose();
@@ -262,7 +262,7 @@ public class FrmVehicle extends javax.swing.JFrame {
         try {
             //validate
             if (Controller.getInstance().saveVehicle(getInputData())) {
-                JOptionPane.showMessageDialog(this, "Uspesno ste sacuvali vozilo!");
+                JOptionPane.showMessageDialog(this, "The vehicle has been successfully saved!");
             }
         } catch (Exception ex) {
             Logger.getLogger(FrmVehicle.class.getName()).log(Level.SEVERE, null, ex);
@@ -274,7 +274,7 @@ public class FrmVehicle extends javax.swing.JFrame {
         try {
             //validate
             if (Controller.getInstance().updateVehicle(getInputData())) {
-                JOptionPane.showMessageDialog(this, "Uspesno azuriranje!");
+                JOptionPane.showMessageDialog(this, "Update successful!");
                 frmViewVehicles.update();
             }
         } catch (Exception ex) {

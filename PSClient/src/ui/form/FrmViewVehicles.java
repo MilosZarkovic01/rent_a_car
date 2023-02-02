@@ -115,7 +115,7 @@ public class FrmViewVehicles extends javax.swing.JFrame {
     private void btnDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetailActionPerformed
         int selectedRow = tblVehicles.getSelectedRow();
         if (selectedRow == -1) {
-            JOptionPane.showMessageDialog(this, "Morate selektovati red", "Greska", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "You must select the row!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
         new FrmVehicle(vehicles.get(selectedRow), this, VehicleFormModes.VIEW).setVisible(true);
