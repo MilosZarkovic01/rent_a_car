@@ -15,10 +15,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import communication.Recеiver;
+import domain.Client;
 import domain.TypeOfVehicle;
 import java.io.IOException;
 import settings.ConnectionConfig;
-import ui.form.FrmVehicle;
 
 /**
  *
@@ -114,6 +114,28 @@ public class Controller {
 
     public boolean saveVehicle(Vehicle inputData) throws Exception {
         Request request = new Request(Operation.ADD_VEHICLE, inputData);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() != null) {
+            throw response.getException();
+        } else {
+            return true;
+        }
+    }
+
+    public List<Client> getAllClients() throws Exception {
+        Request request = new Request(Operation.GET_ALL_CLIENTS);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() == null) {
+            return (List<Client>) response.getResult();
+        } else {
+            return null;
+        }
+    }
+
+    public boolean updateClient(Client client) throws Exception {
+        Request request = new Request(Operation.UPDATE_CLIENT, client);
         sender.send(request);
         Response response = (Response) receiver.receive();
         if (response.getException() != null) {

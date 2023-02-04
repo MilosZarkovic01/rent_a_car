@@ -5,14 +5,17 @@
 package controller;
 
 import databasebroker.AdministratorDBBroker;
+import databasebroker.ClientDBBroker;
 import databasebroker.TypeOfVehicleDBBroker;
 import databasebroker.VehicleDBBroker;
 import domain.Administrator;
+import domain.Client;
 import domain.TypeOfVehicle;
 import domain.Vehicle;
 import java.util.ArrayList;
 import java.util.List;
 import repository.impl.RepositoryDBAdministrator;
+import repository.impl.RepositoryDBClient;
 import repository.impl.RepositoryDBTypeOfVehicle;
 import repository.impl.RepositoryDBVehicle;
 import thread.ClientThread;
@@ -31,12 +34,14 @@ public class Controller {
     private final AdministratorDBBroker repositoryAdministrator;
     private final VehicleDBBroker repositoryVehicle;
     private final TypeOfVehicleDBBroker repositoryTypeOfVehicle;
+    private final ClientDBBroker repositoryClient;
 
     private Controller() {
         this.activeClients = new ArrayList<>();
         this.repositoryAdministrator = new RepositoryDBAdministrator();
         this.repositoryVehicle = new RepositoryDBVehicle();
         this.repositoryTypeOfVehicle = new RepositoryDBTypeOfVehicle();
+        this.repositoryClient = new RepositoryDBClient();
     }
 
     public static Controller getInstance() {
@@ -78,11 +83,11 @@ public class Controller {
         throw new Exception("Unknown user!");
     }
 
-    public List<ClientThread> getActiveClients() {
+    public List<ClientThread> getActiveAdmins() {
         return activeClients;
     }
 
-    public void setActiveClients(List<ClientThread> activeClients) {
+    public void setActiveAdmins(List<ClientThread> activeClients) {
         this.activeClients = activeClients;
     }
 
@@ -104,6 +109,14 @@ public class Controller {
 
     public void updateVehicle(Vehicle vehicle) throws Exception {
         repositoryVehicle.update(vehicle);
+    }
+
+    public List<Client> getAllClients() {
+        return repositoryClient.getAllClients();
+    }
+
+    public void updateClient(Client client) throws Exception {
+        repositoryClient.update(client);
     }
 
 }

@@ -8,6 +8,7 @@ import consts.VehicleFormModes;
 import controller.Controller;
 import domain.TypeOfVehicle;
 import domain.Vehicle;
+import java.awt.Color;
 import ui.table.model.VehicleTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,10 +22,13 @@ import javax.swing.JOptionPane;
  * @author Somika
  */
 public class FrmViewVehicles extends javax.swing.JFrame {
+
     private List<Vehicle> vehicles;
+    private List<Vehicle> filters;
 
     public FrmViewVehicles() {
         initComponents();
+        setLocationRelativeTo(null);
         vehicles = new ArrayList<>();
         populateForm();
     }
@@ -39,6 +43,7 @@ public class FrmViewVehicles extends javax.swing.JFrame {
         jcbTypeOfVehicles = new javax.swing.JComboBox<>();
         btnFilter = new javax.swing.JButton();
         btnClose = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -77,6 +82,13 @@ public class FrmViewVehicles extends javax.swing.JFrame {
             }
         });
 
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -92,6 +104,8 @@ public class FrmViewVehicles extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jcbTypeOfVehicles, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnReset)
+                        .addGap(18, 18, 18)
                         .addComponent(btnClose)))
                 .addContainerGap(17, Short.MAX_VALUE))
         );
@@ -105,7 +119,8 @@ public class FrmViewVehicles extends javax.swing.JFrame {
                     .addComponent(btnDetail)
                     .addComponent(jcbTypeOfVehicles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnFilter)
-                    .addComponent(btnClose))
+                    .addComponent(btnClose)
+                    .addComponent(btnReset))
                 .addContainerGap(32, Short.MAX_VALUE))
         );
 
@@ -118,18 +133,25 @@ public class FrmViewVehicles extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "You must select the row!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        new FrmVehicle(vehicles.get(selectedRow), this, VehicleFormModes.VIEW).setVisible(true);
+
+        if (filters != null) {
+            new FrmVehicle(filters.get(selectedRow), this, VehicleFormModes.VIEW).setVisible(true);
+        } else {
+            new FrmVehicle(vehicles.get(selectedRow), this, VehicleFormModes.VIEW).setVisible(true);
+        }
+        this.dispose();
     }//GEN-LAST:event_btnDetailActionPerformed
 
     private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
         try {
             vehicles = Controller.getInstance().getAllVehicles();
 
-            tblVehicles.setModel(new VehicleTableModel(vehicles));
+            ((VehicleTableModel) tblVehicles.getModel()).setVehicles(vehicles);
             TypeOfVehicle tov = (TypeOfVehicle) jcbTypeOfVehicles.getSelectedItem();
 
-            List<Vehicle> filters = ((VehicleTableModel) tblVehicles.getModel()).filter(tov);
-            tblVehicles.setModel(new VehicleTableModel(filters));
+            filters = ((VehicleTableModel) tblVehicles.getModel()).filter(tov);
+            ((VehicleTableModel) tblVehicles.getModel()).setVehicles(filters);
+            ((VehicleTableModel) tblVehicles.getModel()).update();
         } catch (Exception ex) {
             Logger.getLogger(FrmViewVehicles.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -139,11 +161,18 @@ public class FrmViewVehicles extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
 
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        ((VehicleTableModel) tblVehicles.getModel()).setVehicles(vehicles);
+        ((VehicleTableModel) tblVehicles.getModel()).update();
+        filters = null;
+    }//GEN-LAST:event_btnResetActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnDetail;
     private javax.swing.JButton btnFilter;
+    private javax.swing.JButton btnReset;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox<TypeOfVehicle> jcbTypeOfVehicles;
     private javax.swing.JTable tblVehicles;
@@ -160,6 +189,7 @@ public class FrmViewVehicles extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(FrmViewVehicles.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.getContentPane().setBackground(new Color(51, 153, 255));
     }
 
     public void remove(Vehicle vehicle) {

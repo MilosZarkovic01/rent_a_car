@@ -58,7 +58,7 @@ public class ServerThread extends Thread {
             }
             
             clients = new ArrayList<>();
-            Controller.getInstance().setActiveClients(new ArrayList<>());
+            Controller.getInstance().setActiveAdmins(new ArrayList<>());
             signal = false;
             serverSocket.close();
             System.out.println("Server je zaustavljen");
