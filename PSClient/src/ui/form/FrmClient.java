@@ -6,6 +6,8 @@ package ui.form;
 
 import controller.Controller;
 import domain.Client;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -40,12 +42,11 @@ public class FrmClient extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         lblFirstName1 = new javax.swing.JLabel();
         lblLastName1 = new javax.swing.JLabel();
-        lblTelNumber1 = new javax.swing.JLabel();
         txtFirstName1 = new javax.swing.JTextField();
         txtLastName1 = new javax.swing.JTextField();
-        txtTelNumber1 = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
+        jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblClients = new javax.swing.JTable();
         btnAdd = new javax.swing.JButton();
@@ -124,9 +125,19 @@ public class FrmClient extends javax.swing.JFrame {
 
         lblLastName1.setText("Last name:");
 
-        lblTelNumber1.setText("Telephone number:");
-
         btnSearch.setText("Search");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Reset");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -135,18 +146,20 @@ public class FrmClient extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnSearch)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblFirstName1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblLastName1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblTelNumber1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(lblFirstName1, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                            .addComponent(lblLastName1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(30, 30, 30)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtTelNumber1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-                            .addComponent(txtLastName1, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtFirstName1))))
+                            .addComponent(txtLastName1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                            .addComponent(txtFirstName1)))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addComponent(btnSearch)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1))
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -160,14 +173,12 @@ public class FrmClient extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblLastName1)
                     .addComponent(txtLastName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTelNumber1)
-                    .addComponent(txtTelNumber1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(52, 52, 52)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnSearch)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnSearch)
+                    .addComponent(jButton1))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
@@ -283,7 +294,7 @@ public class FrmClient extends javax.swing.JFrame {
                 newClient.setTelNumber(txtTelNumber.getText());
                 //adding new Client
                 Controller.getInstance().addClient(newClient);
-                ((ClientTableModel) tblClients.getModel()).add(Controller.getInstance().getAllClients().size()-1, newClient);
+                ((ClientTableModel) tblClients.getModel()).add(Controller.getInstance().getAllClients().size() - 1, newClient);
                 JOptionPane.showMessageDialog(this, "New client added successfuly!");
                 return;
             }
@@ -315,12 +326,50 @@ public class FrmClient extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
 
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        String firstname = txtFirstName1.getText().trim();
+        String lastname = txtLastName1.getText().trim();
+
+        if (lastname.isEmpty() && firstname.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "You must enter the parameters for search!", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        try {
+            List<Client> matchingClients = new ArrayList<>();
+
+            for (Client client : Controller.getInstance().getAllClients()) {
+                if ((firstname.isEmpty() || client.getFirstName().contains(firstname))
+                        && (lastname.isEmpty() || client.getLastName().contains(lastname))) {
+                    matchingClients.add(client);
+                }
+            }
+
+            ((ClientTableModel) tblClients.getModel()).setClients(matchingClients);
+            ((ClientTableModel) tblClients.getModel()).update();
+        } catch (Exception ex) {
+            Logger.getLogger(FrmClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            txtFirstName1.setText("");
+            txtLastName1.setText("");
+            ((ClientTableModel) tblClients.getModel()).setClients(Controller.getInstance().getAllClients());
+            ((ClientTableModel) tblClients.getModel()).update();
+        } catch (Exception ex) {
+            Logger.getLogger(FrmClient.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
@@ -332,14 +381,12 @@ public class FrmClient extends javax.swing.JFrame {
     private javax.swing.JLabel lblLastName;
     private javax.swing.JLabel lblLastName1;
     private javax.swing.JLabel lblTelNumber;
-    private javax.swing.JLabel lblTelNumber1;
     private javax.swing.JTable tblClients;
     private javax.swing.JTextField txtFirstName;
     private javax.swing.JTextField txtFirstName1;
     private javax.swing.JTextField txtLastName;
     private javax.swing.JTextField txtLastName1;
     private javax.swing.JTextField txtTelNumber;
-    private javax.swing.JTextField txtTelNumber1;
     private javax.swing.JTextField txtTitle;
     // End of variables declaration//GEN-END:variables
 
