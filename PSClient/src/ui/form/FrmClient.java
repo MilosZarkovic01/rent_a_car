@@ -48,8 +48,9 @@ public class FrmClient extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblClients = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
         txtTitle = new javax.swing.JTextField();
+        btnClose = new javax.swing.JButton();
 
         jCheckBoxMenuItem1.setSelected(true);
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
@@ -181,6 +182,7 @@ public class FrmClient extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblClients.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         tblClients.setShowGrid(true);
         tblClients.setShowVerticalLines(false);
         tblClients.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -190,12 +192,24 @@ public class FrmClient extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblClients);
 
-        jButton1.setText("Add client");
+        btnAdd.setText("Add client");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         txtTitle.setBackground(new java.awt.Color(51, 153, 255));
         txtTitle.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
         txtTitle.setForeground(new java.awt.Color(255, 255, 255));
         txtTitle.setText("       Clients");
+
+        btnClose.setText("Close");
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCloseActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -205,11 +219,13 @@ public class FrmClient extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(btnAdd))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnClose, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(25, 25, 25))
             .addComponent(txtTitle)
         );
@@ -225,7 +241,9 @@ public class FrmClient extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 493, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAdd)
+                    .addComponent(btnClose))
                 .addGap(43, 43, 43))
         );
 
@@ -235,10 +253,16 @@ public class FrmClient extends javax.swing.JFrame {
     private void tblClientsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClientsMouseClicked
         int selectedRow = tblClients.getSelectedRow();
         try {
-            Client client = Controller.getInstance().getAllClients().get(selectedRow);
-            txtFirstName.setText(client.getFirstName().trim());
-            txtLastName.setText(client.getLastName().trim());
-            txtTelNumber.setText(client.getTelNumber().trim());
+            if (Controller.getInstance().getAllClients().size() > selectedRow) {
+                Client client = Controller.getInstance().getAllClients().get(selectedRow);
+                txtFirstName.setText(client.getFirstName().trim());
+                txtLastName.setText(client.getLastName().trim());
+                txtTelNumber.setText(client.getTelNumber().trim());
+            } else {
+                txtFirstName.setText("");
+                txtLastName.setText("");
+                txtTelNumber.setText("");
+            }
         } catch (Exception ex) {
             Logger.getLogger(FrmClient.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -250,6 +274,18 @@ public class FrmClient extends javax.swing.JFrame {
             int selectedRow = tblClients.getSelectedRow();
             if (selectedRow == -1) {
                 throw new Exception();
+            }
+
+            if (selectedRow >= Controller.getInstance().getAllClients().size()) {
+                Client newClient = new Client();
+                newClient.setFirstName(txtFirstName.getText());
+                newClient.setLastName(txtLastName.getText());
+                newClient.setTelNumber(txtTelNumber.getText());
+                //adding new Client
+                Controller.getInstance().addClient(newClient);
+                ((ClientTableModel) tblClients.getModel()).add(Controller.getInstance().getAllClients().size()-1, newClient);
+                JOptionPane.showMessageDialog(this, "New client added successfuly!");
+                return;
             }
             Client client = Controller.getInstance().getAllClients().get(selectedRow);
 
@@ -271,11 +307,20 @@ public class FrmClient extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btnUpdateActionPerformed
 
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        ((ClientTableModel) tblClients.getModel()).insertEmptyRow();
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_btnCloseActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnClose;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

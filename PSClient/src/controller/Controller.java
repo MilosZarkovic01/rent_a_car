@@ -144,4 +144,13 @@ public class Controller {
             return true;
         }
     }
+
+    public void addClient(Client client) throws Exception {
+        Request request = new Request(Operation.ADD_CLIENT, client);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() != null) {
+            throw response.getException();
+        }
+    }
 }

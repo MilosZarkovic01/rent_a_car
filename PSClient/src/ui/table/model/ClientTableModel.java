@@ -5,7 +5,6 @@
 package ui.table.model;
 
 import domain.Client;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -34,6 +33,10 @@ public class ClientTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
+        if (rowIndex >= clients.size()) {
+            return "";
+        }
+
         Client client = clients.get(rowIndex);
         switch (columnIndex) {
             case 0:
@@ -56,8 +59,18 @@ public class ClientTableModel extends AbstractTableModel {
         fireTableDataChanged();
     }
 
+    public void add(int index, Client client) {
+        clients.remove(index);
+        clients.add(index, client);
+        fireTableDataChanged();
+    }
+
     public void setClients(List<Client> clients) {
         this.clients = clients;
     }
 
+    public void insertEmptyRow() {
+        clients.add(new Client());
+        fireTableDataChanged();
+    }
 }

@@ -14,4 +14,5 @@ import java.util.List;
 public interface ClientDBBroker {
     List<Client> getAllClients();
     void update(Client client) throws Exception;
+    void add(Client client) throws Exception;
 }

@@ -118,5 +118,8 @@ public class Controller {
     public void updateClient(Client client) throws Exception {
         repositoryClient.update(client);
     }
-
+    
+    public void addClient(Client client) throws Exception{
+        repositoryClient.add(client);
+    }
 }

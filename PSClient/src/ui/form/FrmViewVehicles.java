@@ -189,7 +189,6 @@ public class FrmViewVehicles extends javax.swing.JFrame {
         } catch (Exception ex) {
             Logger.getLogger(FrmViewVehicles.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.getContentPane().setBackground(new Color(51, 153, 255));
     }
 
     public void remove(Vehicle vehicle) {

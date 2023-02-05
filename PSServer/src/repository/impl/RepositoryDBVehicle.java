@@ -20,64 +20,53 @@ public class RepositoryDBVehicle implements VehicleDBBroker {
 
     @Override
     public void add(Vehicle vehicle) throws Exception {
-        System.out.println(vehicle.toString());
-        try {
-            String sql = "INSERT INTO vehicle(brand, model, mileage, availability, typeOfVehicle_fk) VALUES(?,?,?,?,?);";
+        //System.out.println(vehicle.toString());
+        String sql = "INSERT INTO vehicle(brand, model, mileage, availability, typeOfVehicle_fk) VALUES(?,?,?,?,?);";
 
-            Connection connection = DBConnectionFactory.getInstance().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setString(1, vehicle.getBrand());
-            preparedStatement.setString(2, vehicle.getModel());
-            preparedStatement.setInt(3, vehicle.getMileage());
-            preparedStatement.setBoolean(4, vehicle.isAvailability());
-            preparedStatement.setLong(5, vehicle.getTypeOfVehicle().getId());
+        Connection connection = DBConnectionFactory.getInstance().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, vehicle.getBrand());
+        preparedStatement.setString(2, vehicle.getModel());
+        preparedStatement.setInt(3, vehicle.getMileage());
+        preparedStatement.setBoolean(4, vehicle.isAvailability());
+        preparedStatement.setLong(5, vehicle.getTypeOfVehicle().getId());
 
-            preparedStatement.executeUpdate();
-            connection.commit();
-            preparedStatement.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        preparedStatement.executeUpdate();
+        connection.commit();
+        preparedStatement.close();
+        connection.close();
     }
 
     @Override
     public void update(Vehicle vehicle) throws Exception {
-        try {
-            String sql = "UPDATE vehicle SET "
-                    + "brand='" + vehicle.getBrand() + "', "
-                    + "model='" + vehicle.getModel() + "', "
-                    + "mileage=" + vehicle.getMileage() + ","
-                    + "availability=" + vehicle.isAvailability() + ","
-                    + "typeOfVehicle_fk=" + vehicle.getTypeOfVehicle().getId() + " "
-                    + "WHERE id=" + vehicle.getId();
-            //System.out.println(sql);
-            Connection connection = DBConnectionFactory.getInstance().getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
-            connection.commit();
-            statement.close();
-            connection.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new Exception("Update vehicle DB error: \n" + ex.getMessage());
-        }
+        String sql = "UPDATE vehicle SET "
+                + "brand='" + vehicle.getBrand() + "', "
+                + "model='" + vehicle.getModel() + "', "
+                + "mileage=" + vehicle.getMileage() + ","
+                + "availability=" + vehicle.isAvailability() + ","
+                + "typeOfVehicle_fk=" + vehicle.getTypeOfVehicle().getId() + " "
+                + "WHERE id=" + vehicle.getId();
+        //System.out.println(sql);
+        Connection connection = DBConnectionFactory.getInstance().getConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+        connection.commit();
+        statement.close();
+        connection.close();
+
     }
 
     @Override
     public void delete(Vehicle vehicle) throws Exception {
-        try {
-            String sql = "DELETE FROM vehicle WHERE id = ?";
+        String sql = "DELETE FROM vehicle WHERE id = ?";
 
-            Connection connection = DBConnectionFactory.getInstance().getConnection();
-            PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setLong(1, vehicle.getId());
-            preparedStatement.execute();
-            connection.commit();
-            preparedStatement.close();
-            connection.close();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        Connection connection = DBConnectionFactory.getInstance().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setLong(1, vehicle.getId());
+        preparedStatement.execute();
+        connection.commit();
+        preparedStatement.close();
+        connection.close();
     }
 
     @Override

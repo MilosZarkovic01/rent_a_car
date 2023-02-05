@@ -80,6 +80,9 @@ public class ClientThread extends Thread {
                             case UPDATE_CLIENT:
                                 Controller.getInstance().updateClient((Client) request.getData());
                                 break;
+                            case ADD_CLIENT:
+                                Controller.getInstance().addClient((Client) request.getData());
+                                break;
                         }
                     } catch (Exception ex) {
                         ex.printStackTrace();

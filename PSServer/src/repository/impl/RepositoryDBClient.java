@@ -7,6 +7,7 @@ package repository.impl;
 import databasebroker.ClientDBBroker;
 import domain.Client;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -48,23 +49,33 @@ public class RepositoryDBClient implements ClientDBBroker {
 
     @Override
     public void update(Client client) throws Exception {
-        try {
-            String sql = "UPDATE client SET "
-                    + "firstname='" + client.getFirstName() + "', "
-                    + "lastname='" + client.getLastName() + "', "
-                    + "telNumber='" + client.getTelNumber() + "' "
-                    + "WHERE id=" + client.getId();
-            System.out.println(sql);
-            Connection connection = DBConnectionFactory.getInstance().getConnection();
-            Statement statement = connection.createStatement();
-            statement.executeUpdate(sql);
-            connection.commit();
-            statement.close();
-            connection.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            throw new Exception("Update client DB error: \n" + ex.getMessage());
-        }
+        String sql = "UPDATE client SET "
+                + "firstname='" + client.getFirstName() + "', "
+                + "lastname='" + client.getLastName() + "', "
+                + "telNumber='" + client.getTelNumber() + "' "
+                + "WHERE id=" + client.getId();
+        //System.out.println(sql);
+        Connection connection = DBConnectionFactory.getInstance().getConnection();
+        Statement statement = connection.createStatement();
+        statement.executeUpdate(sql);
+        connection.commit();
+        statement.close();
+        connection.close();
+    }
+
+    @Override
+    public void add(Client client) throws Exception {
+        String sql = "INSERT INTO client(firstname, lastname, telNumber) VALUES(?,?,?);";
+        Connection connection = DBConnectionFactory.getInstance().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setString(1, client.getFirstName());
+        preparedStatement.setString(2, client.getLastName());
+        preparedStatement.setString(3, client.getTelNumber());
+        preparedStatement.executeUpdate();
+        
+        connection.commit();
+        preparedStatement.close();
+        connection.close();
     }
 
 }

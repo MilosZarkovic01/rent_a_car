@@ -16,5 +16,6 @@ public enum Operation {
     ADD_VEHICLE,
     UPDATE_VEHICLE,
     GET_ALL_CLIENTS,
-    UPDATE_CLIENT;
+    UPDATE_CLIENT,
+    ADD_CLIENT;
 }
