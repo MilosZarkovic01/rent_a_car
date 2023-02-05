@@ -6,6 +6,7 @@ package repository.impl;
 
 import databasebroker.ClientDBBroker;
 import domain.Client;
+import domain.Renting;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -72,10 +73,30 @@ public class RepositoryDBClient implements ClientDBBroker {
         preparedStatement.setString(2, client.getLastName());
         preparedStatement.setString(3, client.getTelNumber());
         preparedStatement.executeUpdate();
-        
+
         connection.commit();
         preparedStatement.close();
         connection.close();
+    }
+
+    @Override
+    public List<Renting> getClientRentings(Client client) throws Exception {
+        List<Renting> clientRentings = new ArrayList<>();
+        String sql = "SELECT vehicle_fk FROM renting WHERE client_fk = ?";
+        Connection connection = DBConnectionFactory.getInstance().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setLong(1, client.getId());
+
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            Renting renting = new Renting();
+            renting.setVehicle(RepositoryDBVehicle.getById(rs.getLong("vehicle_fk")));
+            clientRentings.add(renting);
+        }
+        connection.commit();
+        preparedStatement.close();
+        connection.close();
+        return clientRentings;
     }
 
 }

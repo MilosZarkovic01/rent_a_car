@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author Somika
  */
-public class Client implements Serializable{
+public class Client implements Serializable {
 
     private Long id;
     private String firstName;
@@ -86,4 +86,7 @@ public class Client implements Serializable{
         return "Client{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", telNumber=" + telNumber + '}';
     }
 
+    public boolean isEmpty() {
+        return id == null && firstName == null && lastName == null && telNumber == null;
+    }
 }

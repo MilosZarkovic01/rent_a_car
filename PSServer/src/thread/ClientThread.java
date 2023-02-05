@@ -12,6 +12,7 @@ import communication.Request;
 import communication.Response;
 import controller.Controller;
 import domain.Client;
+import domain.TypeOfVehicle;
 import domain.Vehicle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -82,6 +83,9 @@ public class ClientThread extends Thread {
                                 break;
                             case ADD_CLIENT:
                                 Controller.getInstance().addClient((Client) request.getData());
+                                break;
+                            case GET_CLIENT_RENTINGS:
+                                response.setResult(Controller.getInstance().getClientRentings((Client) request.getData()));
                                 break;
                         }
                     } catch (Exception ex) {

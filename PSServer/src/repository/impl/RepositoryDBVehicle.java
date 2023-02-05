@@ -100,4 +100,25 @@ public class RepositoryDBVehicle implements VehicleDBBroker {
         }
     }
 
+    public static Vehicle getById(Long id) throws Exception {
+        Vehicle vehicle = new Vehicle();
+        String sql = "SELECT brand, model, mileage, availability, typeOfVehicle_fk FROM vehicle WHERE id = ?;";
+        Connection connection = DBConnectionFactory.getInstance().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setLong(1, id);
+
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            vehicle.setId(id);
+            vehicle.setBrand(rs.getString("brand"));
+            vehicle.setModel(rs.getString("model"));
+            vehicle.setMileage(rs.getInt("mileage"));
+            vehicle.setAvailability(rs.getBoolean("availability"));
+            vehicle.setTypeOfVehicle(RepositoryDBTypeOfVehicle.getById(rs.getLong("typeOfVehicle_fk")));
+        }
+        connection.commit();
+
+        return vehicle;
+    }
+
 }

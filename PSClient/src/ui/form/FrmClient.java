@@ -6,12 +6,12 @@ package ui.form;
 
 import controller.Controller;
 import domain.Client;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import ui.table.model.ClientTableModel;
+import domain.TypeOfVehicle;
 
 /**
  *
@@ -46,7 +46,9 @@ public class FrmClient extends javax.swing.JFrame {
         txtLastName1 = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
-        jButton1 = new javax.swing.JButton();
+        btnReset = new javax.swing.JButton();
+        lblVehicleType = new javax.swing.JLabel();
+        jcbVehicleType = new javax.swing.JComboBox<>();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblClients = new javax.swing.JTable();
         btnAdd = new javax.swing.JButton();
@@ -132,10 +134,18 @@ public class FrmClient extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Reset");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnResetActionPerformed(evt);
+            }
+        });
+
+        lblVehicleType.setText("Vehicle type:");
+
+        jcbVehicleType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbVehicleTypeActionPerformed(evt);
             }
         });
 
@@ -146,20 +156,22 @@ public class FrmClient extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblFirstName1, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
-                            .addComponent(lblLastName1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtLastName1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
-                            .addComponent(txtFirstName1)))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addGroup(jPanel2Layout.createSequentialGroup()
                             .addComponent(btnSearch)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1))
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnReset))
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 398, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(lblVehicleType, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(lblFirstName1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                            .addComponent(lblLastName1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtLastName1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                            .addComponent(txtFirstName1)
+                            .addComponent(jcbVehicleType, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(21, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -173,12 +185,16 @@ public class FrmClient extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblLastName1)
                     .addComponent(txtLastName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblVehicleType)
+                    .addComponent(jcbVehicleType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(15, 15, 15)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSearch)
-                    .addComponent(jButton1))
+                    .addComponent(btnReset))
                 .addContainerGap(28, Short.MAX_VALUE))
         );
 
@@ -244,7 +260,7 @@ public class FrmClient extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -262,20 +278,23 @@ public class FrmClient extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblClientsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblClientsMouseClicked
+        txtFirstName.setEditable(true);
+        txtLastName.setEditable(true);
+        txtTelNumber.setEditable(true);
+        btnUpdate.setEnabled(true);
+
         int selectedRow = tblClients.getSelectedRow();
-        try {
-            if (Controller.getInstance().getAllClients().size() > selectedRow) {
-                Client client = Controller.getInstance().getAllClients().get(selectedRow);
-                txtFirstName.setText(client.getFirstName().trim());
-                txtLastName.setText(client.getLastName().trim());
-                txtTelNumber.setText(client.getTelNumber().trim());
-            } else {
-                txtFirstName.setText("");
-                txtLastName.setText("");
-                txtTelNumber.setText("");
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(FrmClient.class.getName()).log(Level.SEVERE, null, ex);
+
+        Client client = ((ClientTableModel) tblClients.getModel()).getClients().get(selectedRow);
+
+        if (!client.isEmpty()) {
+            txtFirstName.setText(client.getFirstName().trim());
+            txtLastName.setText(client.getLastName().trim());
+            txtTelNumber.setText(client.getTelNumber().trim());
+        } else {
+            txtFirstName.setText("");
+            txtLastName.setText("");
+            txtTelNumber.setText("");
         }
     }//GEN-LAST:event_tblClientsMouseClicked
 
@@ -295,6 +314,7 @@ public class FrmClient extends javax.swing.JFrame {
                 //adding new Client
                 Controller.getInstance().addClient(newClient);
                 ((ClientTableModel) tblClients.getModel()).add(Controller.getInstance().getAllClients().size() - 1, newClient);
+                prepareForm();
                 JOptionPane.showMessageDialog(this, "New client added successfuly!");
                 return;
             }
@@ -307,6 +327,7 @@ public class FrmClient extends javax.swing.JFrame {
             if (Controller.getInstance().updateClient(client)) {
                 ((ClientTableModel) tblClients.getModel()).setClients(Controller.getInstance().getAllClients());
                 ((ClientTableModel) tblClients.getModel()).update();
+                prepareForm();
                 JOptionPane.showMessageDialog(this, "Update successful!");
             }
 
@@ -330,57 +351,67 @@ public class FrmClient extends javax.swing.JFrame {
         String firstname = txtFirstName1.getText().trim();
         String lastname = txtLastName1.getText().trim();
 
-        if (lastname.isEmpty() && firstname.isEmpty()) {
+        if (lastname.isEmpty() && firstname.isEmpty() && jcbVehicleType.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "You must enter the parameters for search!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         try {
-            List<Client> matchingClients = new ArrayList<>();
-
-            for (Client client : Controller.getInstance().getAllClients()) {
-                if ((firstname.isEmpty() || client.getFirstName().contains(firstname))
-                        && (lastname.isEmpty() || client.getLastName().contains(lastname))) {
-                    matchingClients.add(client);
-                }
-            }
-
-            ((ClientTableModel) tblClients.getModel()).setClients(matchingClients);
+            ((ClientTableModel) tblClients.getModel()).setClients(Controller.getInstance().searchClients(firstname, lastname, (TypeOfVehicle) jcbVehicleType.getSelectedItem()));
             ((ClientTableModel) tblClients.getModel()).update();
+            btnAdd.setEnabled(false);
+
         } catch (Exception ex) {
             Logger.getLogger(FrmClient.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnSearchActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         try {
+            txtFirstName.setText("");
+            txtLastName.setText("");
+            txtTelNumber.setText("");
+
+            txtTitle.setEditable(false);
+            txtFirstName.setEditable(false);
+            txtLastName.setEditable(false);
+            txtTelNumber.setEditable(false);
+            btnUpdate.setEnabled(false);
             txtFirstName1.setText("");
             txtLastName1.setText("");
+            jcbVehicleType.setSelectedIndex(-1);
+            btnAdd.setEnabled(true);
             ((ClientTableModel) tblClients.getModel()).setClients(Controller.getInstance().getAllClients());
             ((ClientTableModel) tblClients.getModel()).update();
         } catch (Exception ex) {
             Logger.getLogger(FrmClient.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnResetActionPerformed
+
+    private void jcbVehicleTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbVehicleTypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jcbVehicleTypeActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnReset;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
-    private javax.swing.JButton jButton1;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JComboBox<TypeOfVehicle> jcbVehicleType;
     private javax.swing.JLabel lblFirstName;
     private javax.swing.JLabel lblFirstName1;
     private javax.swing.JLabel lblLastName;
     private javax.swing.JLabel lblLastName1;
     private javax.swing.JLabel lblTelNumber;
+    private javax.swing.JLabel lblVehicleType;
     private javax.swing.JTable tblClients;
     private javax.swing.JTextField txtFirstName;
     private javax.swing.JTextField txtFirstName1;
@@ -391,9 +422,19 @@ public class FrmClient extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void prepareForm() {
+        txtFirstName.setText("");
+        txtLastName.setText("");
+        txtTelNumber.setText("");
+
         txtTitle.setEditable(false);
+        txtFirstName.setEditable(false);
+        txtLastName.setEditable(false);
+        txtTelNumber.setEditable(false);
+        btnUpdate.setEnabled(false);
         try {
             tblClients.setModel(new ClientTableModel(Controller.getInstance().getAllClients()));
+            jcbVehicleType.setModel(new DefaultComboBoxModel(Controller.getInstance().getAllTypes().toArray()));
+            jcbVehicleType.setSelectedIndex(-1);
         } catch (Exception ex) {
             Logger.getLogger(FrmClient.class.getName()).log(Level.SEVERE, null, ex);
         }

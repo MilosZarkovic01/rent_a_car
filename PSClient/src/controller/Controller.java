@@ -16,8 +16,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import communication.Recеiver;
 import domain.Client;
+import domain.Renting;
 import domain.TypeOfVehicle;
 import java.io.IOException;
+import java.util.ArrayList;
 import settings.ConnectionConfig;
 
 /**
@@ -151,6 +153,47 @@ public class Controller {
         Response response = (Response) receiver.receive();
         if (response.getException() != null) {
             throw response.getException();
+        }
+    }
+
+    public List<Client> searchClients(String firstname, String lastname, TypeOfVehicle tov) throws Exception {
+        List<Client> matchingClients = new ArrayList<>();
+        for (Client client : Controller.getInstance().getAllClients()) {
+            boolean match = true;
+            if (!firstname.isEmpty() && !client.getFirstName().contains(firstname)) {
+                match = false;
+            }
+            if (!lastname.isEmpty() && !client.getLastName().contains(lastname)) {
+                match = false;
+            }
+            if (tov != null) {
+                boolean found = false;
+                for (Renting renting : getClientRentings(client)) {
+                    if (renting.getVehicle().getTypeOfVehicle().equals(tov)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    match = false;
+                }
+            }
+            if (match) {
+                matchingClients.add(client);
+            }
+        }
+
+        return matchingClients;
+    }
+
+    public List<Renting> getClientRentings(Client client) throws Exception {
+        Request request = new Request(Operation.GET_CLIENT_RENTINGS, client);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() == null) {
+            return (List<Renting>) response.getResult();
+        } else {
+            return null;
         }
     }
 }

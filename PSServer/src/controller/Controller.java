@@ -10,6 +10,7 @@ import databasebroker.TypeOfVehicleDBBroker;
 import databasebroker.VehicleDBBroker;
 import domain.Administrator;
 import domain.Client;
+import domain.Renting;
 import domain.TypeOfVehicle;
 import domain.Vehicle;
 import java.util.ArrayList;
@@ -121,5 +122,8 @@ public class Controller {
     
     public void addClient(Client client) throws Exception{
         repositoryClient.add(client);
+    }
+    public List<Renting> getClientRentings(Client client) throws Exception{
+        return repositoryClient.getClientRentings(client);
     }
 }

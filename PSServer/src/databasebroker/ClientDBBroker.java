@@ -5,6 +5,7 @@
 package databasebroker;
 
 import domain.Client;
+import domain.Renting;
 import java.util.List;
 
 /**
@@ -15,4 +16,5 @@ public interface ClientDBBroker {
     List<Client> getAllClients();
     void update(Client client) throws Exception;
     void add(Client client) throws Exception;
+    List<Renting> getClientRentings(Client client) throws Exception;
 }
