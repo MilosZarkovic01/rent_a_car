@@ -80,6 +80,17 @@ public class Controller {
         }
     }
 
+    public List<Vehicle> getAvailableVehicle() throws Exception {
+        Request request = new Request(Operation.GET_AVAILABLE_VEHICLES);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() == null) {
+            return (List<Vehicle>) response.getResult();
+        } else {
+            return null;
+        }
+    }
+
     public List<TypeOfVehicle> getAllTypes() throws Exception {
         Request request = new Request(Operation.GET_ALL_TYPES);
         sender.send(request);
@@ -188,6 +199,17 @@ public class Controller {
 
     public List<Renting> getClientRentings(Client client) throws Exception {
         Request request = new Request(Operation.GET_CLIENT_RENTINGS, client);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() == null) {
+            return (List<Renting>) response.getResult();
+        } else {
+            return null;
+        }
+    }
+
+    public List<Renting> getAllRentings() throws Exception {
+        Request request = new Request(Operation.GET_ALL_RENTINGS);
         sender.send(request);
         Response response = (Response) receiver.receive();
         if (response.getException() == null) {

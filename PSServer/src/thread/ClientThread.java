@@ -63,6 +63,9 @@ public class ClientThread extends Thread {
                             case GET_ALL_VEHICLES:
                                 response.setResult(Controller.getInstance().getAllVehicles());
                                 break;
+                            case GET_AVAILABLE_VEHICLES:
+                                response.setResult(Controller.getInstance().getAvailableVehicles());
+                                break;
                             case GET_ALL_TYPES:
                                 response.setResult(Controller.getInstance().getAllTypes());
                                 break;
@@ -86,6 +89,9 @@ public class ClientThread extends Thread {
                                 break;
                             case GET_CLIENT_RENTINGS:
                                 response.setResult(Controller.getInstance().getClientRentings((Client) request.getData()));
+                                break;
+                            case GET_ALL_RENTINGS:
+                                response.setResult(Controller.getInstance().getAllRentings());
                                 break;
                         }
                     } catch (Exception ex) {

@@ -6,6 +6,7 @@ package controller;
 
 import databasebroker.AdministratorDBBroker;
 import databasebroker.ClientDBBroker;
+import databasebroker.RentingDBBroker;
 import databasebroker.TypeOfVehicleDBBroker;
 import databasebroker.VehicleDBBroker;
 import domain.Administrator;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import repository.impl.RepositoryDBAdministrator;
 import repository.impl.RepositoryDBClient;
+import repository.impl.RepositoryDBRenting;
 import repository.impl.RepositoryDBTypeOfVehicle;
 import repository.impl.RepositoryDBVehicle;
 import thread.ClientThread;
@@ -36,6 +38,7 @@ public class Controller {
     private final VehicleDBBroker repositoryVehicle;
     private final TypeOfVehicleDBBroker repositoryTypeOfVehicle;
     private final ClientDBBroker repositoryClient;
+    private final RentingDBBroker repositoryRenting;
 
     private Controller() {
         this.activeClients = new ArrayList<>();
@@ -43,6 +46,7 @@ public class Controller {
         this.repositoryVehicle = new RepositoryDBVehicle();
         this.repositoryTypeOfVehicle = new RepositoryDBTypeOfVehicle();
         this.repositoryClient = new RepositoryDBClient();
+        this.repositoryRenting = new RepositoryDBRenting();
     }
 
     public static Controller getInstance() {
@@ -96,6 +100,10 @@ public class Controller {
         return repositoryVehicle.getAll();
     }
 
+    public List<Vehicle> getAvailableVehicles() {
+        return repositoryVehicle.getAvailable();
+    }
+
     public List<TypeOfVehicle> getAllTypes() {
         return repositoryTypeOfVehicle.getAll();
     }
@@ -119,11 +127,16 @@ public class Controller {
     public void updateClient(Client client) throws Exception {
         repositoryClient.update(client);
     }
-    
-    public void addClient(Client client) throws Exception{
+
+    public void addClient(Client client) throws Exception {
         repositoryClient.add(client);
     }
-    public List<Renting> getClientRentings(Client client) throws Exception{
+
+    public List<Renting> getClientRentings(Client client) throws Exception {
         return repositoryClient.getClientRentings(client);
+    }
+
+    public List<Renting> getAllRentings() throws Exception {
+        return repositoryRenting.getAll();
     }
 }

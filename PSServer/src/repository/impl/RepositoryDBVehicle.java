@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 import repository.db.DBConnectionFactory;
 import databasebroker.VehicleDBBroker;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -119,6 +121,34 @@ public class RepositoryDBVehicle implements VehicleDBBroker {
         connection.commit();
 
         return vehicle;
+    }
+
+    @Override
+    public List<Vehicle> getAvailable() {
+        try {
+            List<Vehicle> availableVehicles = new ArrayList<>();
+            String sql = "SELECT * FROM vehicle WHERE availability = true;";
+            Connection connection = DBConnectionFactory.getInstance().getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            while (rs.next()) {
+                Vehicle vehicle = new Vehicle();
+                vehicle.setId(rs.getLong("id"));
+                vehicle.setBrand(rs.getString("brand"));
+                vehicle.setModel(rs.getString("model"));
+                vehicle.setMileage(rs.getInt("mileage"));
+                vehicle.setAvailability(rs.getBoolean("availability"));
+                vehicle.setTypeOfVehicle(RepositoryDBTypeOfVehicle.getById(rs.getLong("typeOfVehicle_fk")));
+                availableVehicles.add(vehicle);
+            }
+            connection.commit();
+            statement.close();
+            connection.close();
+            return availableVehicles;
+        } catch (Exception ex) {
+            Logger.getLogger(RepositoryDBVehicle.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
     }
 
 }

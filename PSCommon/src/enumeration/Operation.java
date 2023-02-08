@@ -11,6 +11,7 @@ package enumeration;
 public enum Operation {
     LOG_IN,
     GET_ALL_VEHICLES,
+    GET_AVAILABLE_VEHICLES,
     GET_ALL_TYPES,
     DELETE_VEHICLE,
     ADD_VEHICLE,
@@ -18,5 +19,6 @@ public enum Operation {
     GET_ALL_CLIENTS,
     UPDATE_CLIENT,
     ADD_CLIENT,
-    GET_CLIENT_RENTINGS;
+    GET_CLIENT_RENTINGS,
+    GET_ALL_RENTINGS;
 }

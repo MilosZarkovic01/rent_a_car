@@ -4,17 +4,13 @@
  */
 package databasebroker;
 
-import domain.Vehicle;
+import domain.Renting;
 import java.util.List;
 
 /**
  *
  * @author Somika
  */
-public interface VehicleDBBroker {
-    void add(Vehicle vehicle) throws Exception;
-    void update(Vehicle vehicle) throws Exception;
-    void delete(Vehicle vehicle)throws Exception;
-    List<Vehicle> getAll();
-    List<Vehicle> getAvailable();
+public interface RentingDBBroker {
+    List<Renting> getAll() throws Exception;
 }

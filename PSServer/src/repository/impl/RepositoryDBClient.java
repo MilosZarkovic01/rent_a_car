@@ -99,4 +99,23 @@ public class RepositoryDBClient implements ClientDBBroker {
         return clientRentings;
     }
 
+    public static Client getById(Long id) throws Exception {
+        Client client = new Client();
+        String sql = "SELECT firstname, lastname, telNumber FROM client WHERE id = ?;";
+        Connection connection = DBConnectionFactory.getInstance().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setLong(1, id);
+
+        ResultSet rs = preparedStatement.executeQuery();
+        while (rs.next()) {
+            client.setId(id);
+            client.setFirstName(rs.getString("firstname"));
+            client.setLastName(rs.getString("lastname"));
+            client.setTelNumber(rs.getString("telNumber"));
+        }
+        connection.commit();
+
+        return client;
+    }
+
 }
