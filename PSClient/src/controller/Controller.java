@@ -16,10 +16,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import communication.Recеiver;
 import domain.Client;
+import domain.PriceListItem;
 import domain.Renting;
 import domain.TypeOfVehicle;
 import java.io.IOException;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 import settings.ConnectionConfig;
 
 /**
@@ -216,6 +220,31 @@ public class Controller {
             return (List<Renting>) response.getResult();
         } else {
             return null;
+        }
+    }
+
+    public List<PriceListItem> getPriceListItems(TypeOfVehicle tov) throws Exception {
+        Request request = new Request(Operation.GET_PRICE_LIST_ITEMS, tov);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() == null) {
+            return (List<PriceListItem>) response.getResult();
+        } else {
+            return null;
+        }
+    }
+
+    public double calculateTotalAmount(Date dateFrom, Date dateTo) {
+        long diff = dateTo.getTime() - dateFrom.getTime();
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+    }
+
+    public void addRenting(Renting renting) throws Exception {
+        Request request = new Request(Operation.ADD_RENTING, renting);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() != null) {
+            throw response.getException();
         }
     }
 }

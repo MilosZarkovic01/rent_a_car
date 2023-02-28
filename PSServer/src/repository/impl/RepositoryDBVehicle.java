@@ -22,7 +22,6 @@ public class RepositoryDBVehicle implements VehicleDBBroker {
 
     @Override
     public void add(Vehicle vehicle) throws Exception {
-        //System.out.println(vehicle.toString());
         String sql = "INSERT INTO vehicle(brand, model, mileage, availability, typeOfVehicle_fk) VALUES(?,?,?,?,?);";
 
         Connection connection = DBConnectionFactory.getInstance().getConnection();
@@ -48,7 +47,6 @@ public class RepositoryDBVehicle implements VehicleDBBroker {
                 + "availability=" + vehicle.isAvailability() + ","
                 + "typeOfVehicle_fk=" + vehicle.getTypeOfVehicle().getId() + " "
                 + "WHERE id=" + vehicle.getId();
-        //System.out.println(sql);
         Connection connection = DBConnectionFactory.getInstance().getConnection();
         Statement statement = connection.createStatement();
         statement.executeUpdate(sql);
@@ -102,32 +100,11 @@ public class RepositoryDBVehicle implements VehicleDBBroker {
         }
     }
 
-    public static Vehicle getById(Long id) throws Exception {
-        Vehicle vehicle = new Vehicle();
-        String sql = "SELECT brand, model, mileage, availability, typeOfVehicle_fk FROM vehicle WHERE id = ?;";
-        Connection connection = DBConnectionFactory.getInstance().getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setLong(1, id);
-
-        ResultSet rs = preparedStatement.executeQuery();
-        while (rs.next()) {
-            vehicle.setId(id);
-            vehicle.setBrand(rs.getString("brand"));
-            vehicle.setModel(rs.getString("model"));
-            vehicle.setMileage(rs.getInt("mileage"));
-            vehicle.setAvailability(rs.getBoolean("availability"));
-            vehicle.setTypeOfVehicle(RepositoryDBTypeOfVehicle.getById(rs.getLong("typeOfVehicle_fk")));
-        }
-        connection.commit();
-
-        return vehicle;
-    }
-
     @Override
     public List<Vehicle> getAvailable() {
         try {
             List<Vehicle> availableVehicles = new ArrayList<>();
-            String sql = "SELECT * FROM vehicle WHERE availability = true;";
+            String sql = "SELECT * FROM vehicle v INNER JOIN typeofvehicle tov ON v.typeOfVehicle_fk = tov.id WHERE availability = true;";
             Connection connection = DBConnectionFactory.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
@@ -138,7 +115,10 @@ public class RepositoryDBVehicle implements VehicleDBBroker {
                 vehicle.setModel(rs.getString("model"));
                 vehicle.setMileage(rs.getInt("mileage"));
                 vehicle.setAvailability(rs.getBoolean("availability"));
-                vehicle.setTypeOfVehicle(RepositoryDBTypeOfVehicle.getById(rs.getLong("typeOfVehicle_fk")));
+
+                TypeOfVehicle tov = new TypeOfVehicle(rs.getLong("tov.id"), rs.getString("tov.name"));
+                vehicle.setTypeOfVehicle(tov);
+
                 availableVehicles.add(vehicle);
             }
             connection.commit();

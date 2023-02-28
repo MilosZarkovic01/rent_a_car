@@ -7,6 +7,8 @@ package repository.impl;
 import databasebroker.ClientDBBroker;
 import domain.Client;
 import domain.Renting;
+import domain.TypeOfVehicle;
+import domain.Vehicle;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,7 +57,6 @@ public class RepositoryDBClient implements ClientDBBroker {
                 + "lastname='" + client.getLastName() + "', "
                 + "telNumber='" + client.getTelNumber() + "' "
                 + "WHERE id=" + client.getId();
-        //System.out.println(sql);
         Connection connection = DBConnectionFactory.getInstance().getConnection();
         Statement statement = connection.createStatement();
         statement.executeUpdate(sql);
@@ -82,7 +83,7 @@ public class RepositoryDBClient implements ClientDBBroker {
     @Override
     public List<Renting> getClientRentings(Client client) throws Exception {
         List<Renting> clientRentings = new ArrayList<>();
-        String sql = "SELECT vehicle_fk FROM renting WHERE client_fk = ?";
+        String sql = "SELECT * FROM renting r INNER JOIN vehicle v ON r.vehicle_fk = v.id INNER JOIN typeofvehicle tov ON tov.id = v.typeOfVehicle_fk WHERE client_fk = ?";
         Connection connection = DBConnectionFactory.getInstance().getConnection();
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
         preparedStatement.setLong(1, client.getId());
@@ -90,7 +91,18 @@ public class RepositoryDBClient implements ClientDBBroker {
         ResultSet rs = preparedStatement.executeQuery();
         while (rs.next()) {
             Renting renting = new Renting();
-            renting.setVehicle(RepositoryDBVehicle.getById(rs.getLong("vehicle_fk")));
+            Vehicle vehicle = new Vehicle();
+            vehicle.setId(rs.getLong("v.id"));
+            vehicle.setBrand(rs.getString("v.brand"));
+            vehicle.setModel(rs.getString("v.model"));
+            vehicle.setAvailability(rs.getBoolean("v.availability"));
+
+            TypeOfVehicle tov = new TypeOfVehicle();
+            tov.setId(rs.getLong("tov.id"));
+            tov.setName(rs.getString("tov.name"));
+
+            vehicle.setTypeOfVehicle(tov);
+            renting.setVehicle(vehicle);
             clientRentings.add(renting);
         }
         connection.commit();
@@ -98,24 +110,4 @@ public class RepositoryDBClient implements ClientDBBroker {
         connection.close();
         return clientRentings;
     }
-
-    public static Client getById(Long id) throws Exception {
-        Client client = new Client();
-        String sql = "SELECT firstname, lastname, telNumber FROM client WHERE id = ?;";
-        Connection connection = DBConnectionFactory.getInstance().getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setLong(1, id);
-
-        ResultSet rs = preparedStatement.executeQuery();
-        while (rs.next()) {
-            client.setId(id);
-            client.setFirstName(rs.getString("firstname"));
-            client.setLastName(rs.getString("lastname"));
-            client.setTelNumber(rs.getString("telNumber"));
-        }
-        connection.commit();
-
-        return client;
-    }
-
 }

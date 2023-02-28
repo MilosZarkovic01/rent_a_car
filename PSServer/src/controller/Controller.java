@@ -6,11 +6,13 @@ package controller;
 
 import databasebroker.AdministratorDBBroker;
 import databasebroker.ClientDBBroker;
+import databasebroker.PriceListItemDBBroker;
 import databasebroker.RentingDBBroker;
 import databasebroker.TypeOfVehicleDBBroker;
 import databasebroker.VehicleDBBroker;
 import domain.Administrator;
 import domain.Client;
+import domain.PriceListItem;
 import domain.Renting;
 import domain.TypeOfVehicle;
 import domain.Vehicle;
@@ -18,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import repository.impl.RepositoryDBAdministrator;
 import repository.impl.RepositoryDBClient;
+import repository.impl.RepositoryDBPriceListItem;
 import repository.impl.RepositoryDBRenting;
 import repository.impl.RepositoryDBTypeOfVehicle;
 import repository.impl.RepositoryDBVehicle;
@@ -39,6 +42,7 @@ public class Controller {
     private final TypeOfVehicleDBBroker repositoryTypeOfVehicle;
     private final ClientDBBroker repositoryClient;
     private final RentingDBBroker repositoryRenting;
+    private final PriceListItemDBBroker repositoryPriceListItem;
 
     private Controller() {
         this.activeClients = new ArrayList<>();
@@ -47,6 +51,7 @@ public class Controller {
         this.repositoryTypeOfVehicle = new RepositoryDBTypeOfVehicle();
         this.repositoryClient = new RepositoryDBClient();
         this.repositoryRenting = new RepositoryDBRenting();
+        this.repositoryPriceListItem = new RepositoryDBPriceListItem();
     }
 
     public static Controller getInstance() {
@@ -138,5 +143,13 @@ public class Controller {
 
     public List<Renting> getAllRentings() throws Exception {
         return repositoryRenting.getAll();
+    }
+
+    public List<PriceListItem> getPriceListItems(TypeOfVehicle tov) throws Exception {
+        return repositoryPriceListItem.getPriceListItems(tov);
+    }
+
+    public void addRenting(Renting renting) throws Exception {
+        repositoryRenting.add(renting);
     }
 }

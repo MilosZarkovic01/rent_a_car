@@ -14,8 +14,9 @@ import java.util.Objects;
  *
  * @author Somika
  */
-public class PriceListItem implements Serializable{
+public class PriceListItem implements Serializable {
 
+    private Long id;
     private PriceList priceList;
     private BigDecimal price;
     private PDV pdv;
@@ -26,7 +27,8 @@ public class PriceListItem implements Serializable{
     public PriceListItem() {
     }
 
-    public PriceListItem(PriceList priceList, BigDecimal price, PDV pdv, TypeOfPriceListItem typeOfPriceListItem, Currency currency, TypeOfVehicle typeOfVehicle) {
+    public PriceListItem(Long id, PriceList priceList, BigDecimal price, PDV pdv, TypeOfPriceListItem typeOfPriceListItem, Currency currency, TypeOfVehicle typeOfVehicle) {
+        this.id = id;
         this.priceList = priceList;
         this.price = price;
         this.pdv = pdv;
@@ -83,6 +85,14 @@ public class PriceListItem implements Serializable{
         this.typeOfVehicle = typeOfVehicle;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -106,7 +116,7 @@ public class PriceListItem implements Serializable{
 
     @Override
     public String toString() {
-        return "PriceListItem{" + "priceList=" + priceList + ", price=" + price + ", pdv=" + pdv + ", typeOfPriceListItem=" + typeOfPriceListItem + ", currency=" + currency + ", typeOfVehicle=" + typeOfVehicle + '}';
+        return price + " " + currency + " " + typeOfPriceListItem;
     }
 
 }

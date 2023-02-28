@@ -7,7 +7,6 @@ package repository.impl;
 import databasebroker.TypeOfVehicleDBBroker;
 import domain.TypeOfVehicle;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -42,22 +41,4 @@ public class RepositoryDBTypeOfVehicle implements TypeOfVehicleDBBroker {
             return null;
         }
     }
-
-    public static TypeOfVehicle getById(Long id) throws Exception {
-        TypeOfVehicle tov = new TypeOfVehicle();
-        String sql = "SELECT name FROM typeofvehicle WHERE id = ?;";
-        Connection connection = DBConnectionFactory.getInstance().getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        preparedStatement.setLong(1, id);
-        ResultSet rs = preparedStatement.executeQuery();
-
-        while (rs.next()) {
-            tov.setId(id);
-            tov.setName(rs.getString("name"));
-        }
-
-        connection.commit();
-        return tov;
-    }
-
 }

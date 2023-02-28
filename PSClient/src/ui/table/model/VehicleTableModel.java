@@ -59,8 +59,9 @@ public class VehicleTableModel extends AbstractTableModel {
 
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        if(columnIndex == 3)
+        if (columnIndex == 3) {
             return Boolean.class;
+        }
         return Object.class;
     }
 
@@ -71,29 +72,32 @@ public class VehicleTableModel extends AbstractTableModel {
     public void setVehicles(List<Vehicle> vehicles) {
         this.vehicles = vehicles;
     }
-    
 
-    public void removeVehicle(Vehicle vehicle){
+    public void removeVehicle(Vehicle vehicle) {
         vehicles.remove(vehicle);
         fireTableDataChanged();
     }
-    
-    public void save(Vehicle vehicle){
+
+    public void save(Vehicle vehicle) {
         vehicles.add(vehicle);
         fireTableDataChanged();
     }
-    
-    public void update(){
+
+    public void update() {
         fireTableDataChanged();
     }
     
-    public List<Vehicle> filter(TypeOfVehicle tov){
+    public List<Vehicle> filter(TypeOfVehicle tov) {
         List<Vehicle> filterVehicles = new ArrayList<>();
         for (Vehicle vehicle : vehicles) {
-            if(vehicle.getTypeOfVehicle().equals(tov)){ 
+            if (vehicle.getTypeOfVehicle().equals(tov)) {
                 filterVehicles.add(vehicle);
             }
         }
         return filterVehicles;
+    }
+
+    public TypeOfVehicle getTypeOfVehicle(int selectedRow) {
+        return vehicles.get(selectedRow).getTypeOfVehicle();
     }
 }

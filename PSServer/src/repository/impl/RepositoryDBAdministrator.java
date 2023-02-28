@@ -17,8 +17,7 @@ import repository.db.DBConnectionFactory;
  *
  * @author Somika
  */
-public class RepositoryDBAdministrator implements AdministratorDBBroker{
-
+public class RepositoryDBAdministrator implements AdministratorDBBroker {
 
     @Override
     public List<Administrator> getAll() {
@@ -34,7 +33,7 @@ public class RepositoryDBAdministrator implements AdministratorDBBroker{
                 administrator.setUsername(rs.getString("username"));
                 administrator.setPassword(rs.getString("password"));
                 administrator.setEmail(rs.getString("email"));
-                
+
                 administrators.add(administrator);
             }
             rs.close();
@@ -45,5 +44,5 @@ public class RepositoryDBAdministrator implements AdministratorDBBroker{
             return null;
         }
     }
-    
+
 }

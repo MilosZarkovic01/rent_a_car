@@ -17,18 +17,18 @@ import java.util.Objects;
 public class PriceList implements Serializable{
 
     private Long id;
-    private LocalDate dateFrom;
-    private LocalDate dateTo;
+    private LocalDate validFrom;
+    private LocalDate validTo;
     private List<PriceListItem> priceListItems;
 
     public PriceList() {
         this.priceListItems = new ArrayList<>();
     }
 
-    public PriceList(Long id, LocalDate dateFrom, LocalDate dateTo) {
+    public PriceList(Long id, LocalDate validFrom, LocalDate validTo) {
         this.id = id;
-        this.dateFrom = dateFrom;
-        this.dateTo = dateTo;
+        this.validFrom = validFrom;
+        this.validTo = validTo;
         this.priceListItems = new ArrayList<>();
     }
 
@@ -41,19 +41,19 @@ public class PriceList implements Serializable{
     }
 
     public LocalDate getDateFrom() {
-        return dateFrom;
+        return validFrom;
     }
 
-    public void setDateFrom(LocalDate dateFrom) {
-        this.dateFrom = dateFrom;
+    public void setDateFrom(LocalDate validFrom) {
+        this.validFrom = validFrom;
     }
 
     public LocalDate getDateTo() {
-        return dateTo;
+        return validTo;
     }
 
     public void setDateTo(LocalDate dateTo) {
-        this.dateTo = dateTo;
+        this.validTo = dateTo;
     }
 
     public List<PriceListItem> getPriceListItems() {
@@ -87,7 +87,7 @@ public class PriceList implements Serializable{
 
     @Override
     public String toString() {
-        return "PriceList{" + "id=" + id + ", dateFrom=" + dateFrom + ", dateTo=" + dateTo + ", priceListItems=" + priceListItems + '}';
+        return "PriceList{" + "id=" + id + ", validFrom=" + validFrom + ", validTo=" + validTo + ", priceListItems=" + priceListItems + '}';
     }
 
 }

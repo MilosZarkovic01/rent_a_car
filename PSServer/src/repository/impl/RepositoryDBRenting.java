@@ -5,10 +5,13 @@
 package repository.impl;
 
 import databasebroker.RentingDBBroker;
+import domain.Client;
 import domain.PDV;
 import domain.PriceList;
 import domain.PriceListItem;
 import domain.Renting;
+import domain.TypeOfVehicle;
+import domain.Vehicle;
 import enumeration.Currency;
 import enumeration.TypeOfPriceListItem;
 import java.math.BigDecimal;
@@ -27,6 +30,9 @@ public class RepositoryDBRenting implements RentingDBBroker {
     public List<Renting> getAll() throws Exception {
         List<Renting> rentings = new ArrayList<>();
         String sql = "SELECT * FROM renting r\n"
+                + "INNER JOIN client c ON r.client_fk = c.id\n"
+                + "INNER JOIN vehicle v ON r.vehicle_fk = v.id\n"
+                + "INNER JOIN typeofvehicle tov ON v.typeOfVehicle_fk = tov.id\n"
                 + "INNER JOIN pricelistitem pli ON r.priceListItem_fk = pli.id\n"
                 + "INNER JOIN pdv p ON pli.pdv_fk = p.id\n"
                 + "INNER JOIN pricelist pl ON pli.priceList_id = pl.id";
@@ -40,10 +46,29 @@ public class RepositoryDBRenting implements RentingDBBroker {
             renting.setDateTo(rs.getDate("dateTo").toLocalDate());
             renting.setTotalAmount(BigDecimal.valueOf(rs.getDouble("totalAmount")));
             renting.setCurrency(Currency.valueOf(rs.getString("currency")));
-            renting.setVehicle(RepositoryDBVehicle.getById(rs.getLong("vehicle_fk")));
-            renting.setClient(RepositoryDBClient.getById(rs.getLong("client_fk")));
+            
+            Vehicle vehicle = new Vehicle();
+            vehicle.setId(rs.getLong("v.id"));
+            vehicle.setBrand(rs.getString("v.brand"));
+            vehicle.setModel(rs.getString("v.model"));
+            vehicle.setMileage(rs.getInt("v.mileage"));
+            vehicle.setAvailability(rs.getBoolean("v.availability"));
+            
+            TypeOfVehicle tov = new TypeOfVehicle();
+            tov.setId(rs.getLong("tov.id"));
+            tov.setName(rs.getString("tov.name"));
+            vehicle.setTypeOfVehicle(tov);
+            renting.setVehicle(vehicle);
+            
+            Client client = new Client();
+            client.setId(rs.getLong("c.id"));
+            client.setFirstName(rs.getString("c.firstname"));
+            client.setLastName(rs.getString("c.lastname"));
+            client.setTelNumber(rs.getString("c.telNumber"));
+            renting.setClient(client);
             
             PriceListItem pli = new PriceListItem();
+            pli.setId(rs.getLong("pli.id"));
             pli.setPrice(BigDecimal.valueOf(rs.getDouble("pli.price")));
             pli.setTypeOfPriceListItem(TypeOfPriceListItem.valueOf(rs.getString("pli.typeOfPriceListItem")));
             pli.setCurrency(Currency.valueOf(rs.getString("pli.currency")));
@@ -53,7 +78,7 @@ public class RepositoryDBRenting implements RentingDBBroker {
             pdv.setPercent(rs.getDouble("p.percent"));
             
             pli.setPdv(pdv);
-            pli.setTypeOfVehicle(RepositoryDBTypeOfVehicle.getById(rs.getLong("pli.typeOfVehicle_fk")));
+            pli.setTypeOfVehicle(tov);
             PriceList pl = new PriceList();
             pl.setDateFrom(rs.getDate("pl.dateFrom").toLocalDate());
             pl.setDateTo(rs.getDate("pl.dateTo").toLocalDate());
@@ -69,6 +94,25 @@ public class RepositoryDBRenting implements RentingDBBroker {
         connection.close();
         
         return rentings;
+    }
+    
+    @Override
+    public void add(Renting renting) throws Exception {
+        String sql = "INSERT INTO renting(dateFrom, dateTo, totalAmount, currency, vehicle_fk, client_fk, priceListItem_fk) VALUES(?,?,?,?,?,?,?);";
+        Connection connection = DBConnectionFactory.getInstance().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setDate(1, Date.valueOf(renting.getDateFrom()));
+        preparedStatement.setDate(2, Date.valueOf(renting.getDateTo()));
+        preparedStatement.setBigDecimal(3, renting.getTotalAmount());
+        preparedStatement.setString(4, renting.getCurrency().toString());
+        preparedStatement.setLong(5, renting.getVehicle().getId());
+        preparedStatement.setLong(6, renting.getClient().getId());
+        preparedStatement.setLong(7, renting.getPriceListItem().getId());
+        preparedStatement.executeUpdate();
+        
+        connection.commit();
+        preparedStatement.close();
+        connection.close();
     }
     
 }

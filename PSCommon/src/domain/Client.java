@@ -83,7 +83,7 @@ public class Client implements Serializable {
 
     @Override
     public String toString() {
-        return "Client{" + "id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", telNumber=" + telNumber + '}';
+        return firstName + " " + lastName;
     }
 
     public boolean isEmpty() {

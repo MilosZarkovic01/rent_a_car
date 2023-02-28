@@ -4,14 +4,14 @@
  */
 package databasebroker;
 
-import domain.Renting;
+import domain.PriceListItem;
+import domain.TypeOfVehicle;
 import java.util.List;
 
 /**
  *
  * @author Somika
  */
-public interface RentingDBBroker {
-    List<Renting> getAll() throws Exception;
-    void add (Renting renting) throws Exception;
+public interface PriceListItemDBBroker {
+    List<PriceListItem> getPriceListItems(TypeOfVehicle tov) throws Exception;
 }
