@@ -19,8 +19,9 @@ import domain.Client;
 import domain.PriceListItem;
 import domain.Renting;
 import domain.TypeOfVehicle;
+import enumeration.Currency;
 import java.io.IOException;
-import java.time.temporal.ChronoUnit;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
@@ -234,9 +235,9 @@ public class Controller {
         }
     }
 
-    public double calculateTotalAmount(Date dateFrom, Date dateTo) {
+    public double getDuration(Date dateFrom, Date dateTo) {
         long diff = dateTo.getTime() - dateFrom.getTime();
-        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
     }
 
     public void addRenting(Renting renting) throws Exception {
@@ -245,6 +246,18 @@ public class Controller {
         Response response = (Response) receiver.receive();
         if (response.getException() != null) {
             throw response.getException();
+        }
+    }
+
+    public BigDecimal ExchangeRate(BigDecimal amount, Currency currency) {
+        switch (currency.toString()) {
+            case "USD":
+                return amount.multiply(new BigDecimal(110.80));
+            case "EUR":
+                return amount.multiply(new BigDecimal(117.33));
+            case "RSD":
+            default:
+                return amount;
         }
     }
 }

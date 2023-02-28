@@ -86,7 +86,7 @@ public class VehicleTableModel extends AbstractTableModel {
     public void update() {
         fireTableDataChanged();
     }
-    
+
     public List<Vehicle> filter(TypeOfVehicle tov) {
         List<Vehicle> filterVehicles = new ArrayList<>();
         for (Vehicle vehicle : vehicles) {

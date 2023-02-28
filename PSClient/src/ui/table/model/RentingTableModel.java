@@ -5,6 +5,7 @@
 package ui.table.model;
 
 import domain.Renting;
+import java.util.Collections;
 import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
@@ -59,5 +60,13 @@ public class RentingTableModel extends AbstractTableModel {
     @Override
     public String getColumnName(int column) {
         return columnNames[column];
+    }
+
+    public List<Renting> getRentings() {
+        return rentings;
+    }
+
+    public void update() {
+        fireTableDataChanged();
     }
 }

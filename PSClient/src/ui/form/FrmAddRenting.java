@@ -292,7 +292,7 @@ public class FrmAddRenting extends javax.swing.JFrame {
             return;
         }
 
-        double totalAmount = Controller.getInstance().calculateTotalAmount(jdcDateFrom.getDate(), jdcDateTo.getDate()) * ((PriceListItem) jcbPriceListItems.getSelectedItem()).getPrice().doubleValue();
+        double totalAmount = Controller.getInstance().getDuration(jdcDateFrom.getDate(), jdcDateTo.getDate()) * ((PriceListItem) jcbPriceListItems.getSelectedItem()).getPrice().doubleValue();
 
         lblTotalAmount.setText(totalAmount + " " + ((PriceListItem) jcbPriceListItems.getSelectedItem()).getCurrency());
     }//GEN-LAST:event_btnCalculateActionPerformed
