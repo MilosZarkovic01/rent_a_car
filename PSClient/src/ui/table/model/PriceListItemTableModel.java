@@ -65,4 +65,8 @@ public class PriceListItemTableModel extends AbstractTableModel {
         items.remove(index);
         fireTableDataChanged();
     }
+
+    public List<PriceListItem> getItems() {
+        return items;
+    }
 }

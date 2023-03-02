@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableCellRenderer;
 import ui.table.model.RentingTableModel;
 
@@ -20,13 +21,13 @@ import ui.table.model.RentingTableModel;
  * @author Somika
  */
 public class FrmRenting extends javax.swing.JFrame {
-
+    
     public FrmRenting() {
         initComponents();
         setLocationRelativeTo(null);
         prepareForm();
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -40,6 +41,7 @@ public class FrmRenting extends javax.swing.JFrame {
         jcbSortOptions = new javax.swing.JComboBox<>();
         btnSort = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -89,7 +91,7 @@ public class FrmRenting extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Sort by", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Segoe UI", 0, 18))); // NOI18N
 
-        jcbSortOptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Price", "Duration", "Last name", " " }));
+        jcbSortOptions.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Price", "Duration", "Last name" }));
 
         btnSort.setText("Sort");
         btnSort.addActionListener(new java.awt.event.ActionListener() {
@@ -116,13 +118,20 @@ public class FrmRenting extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jcbSortOptions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSort))
-                .addContainerGap(69, Short.MAX_VALUE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         btnCancel.setText("Cancel");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelActionPerformed(evt);
+            }
+        });
+
+        btnDelete.setText("Delete Renting");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
             }
         });
 
@@ -133,15 +142,17 @@ public class FrmRenting extends javax.swing.JFrame {
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(17, 17, 17)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnAdd)
-                        .addGap(31, 31, 31)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDelete)
+                        .addGap(56, 56, 56)
                         .addComponent(btnCancel, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 991, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,12 +160,16 @@ public class FrmRenting extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnAdd)
-                        .addComponent(btnCancel)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(176, 176, 176)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAdd)
+                            .addComponent(btnCancel)
+                            .addComponent(btnDelete)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(30, Short.MAX_VALUE))
         );
 
@@ -196,9 +211,27 @@ public class FrmRenting extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnCancelActionPerformed
 
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        if (tblRentings.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Please select the renting");
+            return;
+        }
+        
+        try {
+            Controller.getInstance().deleteRenting(((RentingTableModel) tblRentings.getModel()).getRentings().get(tblRentings.getSelectedRow()));
+            ((RentingTableModel) tblRentings.getModel()).remove(tblRentings.getSelectedRow());
+            JOptionPane.showMessageDialog(this, "Renting successfully deleted!");
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Renting unsuccessfully deleted!");
+            Logger.getLogger(FrmRenting.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnCancel;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnSort;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -216,7 +249,7 @@ public class FrmRenting extends javax.swing.JFrame {
         }
         tblRentings.setShowGrid(false);
         tblRentings.setShowHorizontalLines(true);
-
+        
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(JLabel.CENTER);
         tblRentings.setDefaultRenderer(Object.class, centerRenderer);

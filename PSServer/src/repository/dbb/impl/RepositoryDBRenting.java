@@ -115,4 +115,17 @@ public class RepositoryDBRenting implements RentingDBBroker {
         connection.close();
     }
 
+    @Override
+    public void delete(Renting renting) throws Exception {
+        String sql = "DELETE FROM renting WHERE id = ?";
+
+        Connection connection = DBConnectionFactory.getInstance().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql);
+        preparedStatement.setLong(1, renting.getId());
+        preparedStatement.execute();
+        connection.commit();
+        preparedStatement.close();
+        connection.close();
+    }
+
 }

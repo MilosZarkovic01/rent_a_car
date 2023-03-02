@@ -12,6 +12,7 @@ import communication.Request;
 import communication.Response;
 import controller.Controller;
 import domain.Client;
+import domain.PriceList;
 import domain.Renting;
 import domain.TypeOfVehicle;
 import domain.Vehicle;
@@ -100,8 +101,14 @@ public class ClientThread extends Thread {
                             case ADD_RENTING:
                                 Controller.getInstance().addRenting((Renting) request.getData());
                                 break;
+                            case DELETE_RENTING:
+                                Controller.getInstance().deleteRenting((Renting) request.getData());
+                                break;
                             case GET_ALL_PDVS:
                                 response.setResult(Controller.getInstance().getAllPDVs());
+                                break;
+                            case ADD_PRICE_LIST:
+                                Controller.getInstance().addPriceList((PriceList) request.getData());
                                 break;
                         }
                     } catch (Exception ex) {

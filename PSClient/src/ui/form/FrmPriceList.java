@@ -6,14 +6,19 @@ package ui.form;
 
 import controller.Controller;
 import domain.PDV;
+import domain.PriceList;
 import domain.PriceListItem;
 import domain.TypeOfVehicle;
 import enumeration.Currency;
 import enumeration.TypeOfPriceListItem;
+import java.awt.Image;
 import java.math.BigDecimal;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import ui.table.model.PriceListItemTableModel;
 
@@ -22,13 +27,13 @@ import ui.table.model.PriceListItemTableModel;
  * @author Somika
  */
 public class FrmPriceList extends javax.swing.JFrame {
-    
+
     public FrmPriceList() {
         initComponents();
         setLocationRelativeTo(null);
         prepareForm();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -58,6 +63,7 @@ public class FrmPriceList extends javax.swing.JFrame {
         btnRemove = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
         btnSave = new javax.swing.JButton();
+        jLabel10 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -245,11 +251,12 @@ public class FrmPriceList extends javax.swing.JFrame {
                         .addGap(44, 44, 44)
                         .addComponent(btnCancel))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(13, 13, 13)
+                                .addGap(20, 20, 20)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -258,7 +265,9 @@ public class FrmPriceList extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jdcDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(jdcDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(130, 130, 130)
+                                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 91, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(20, 20, 20))
@@ -267,20 +276,26 @@ public class FrmPriceList extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 579, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 11, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(105, 105, 105)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jdcDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel3)
-                            .addComponent(jdcDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(61, 61, 61)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jdcDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jdcDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18)))
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -298,9 +313,12 @@ public class FrmPriceList extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void txtPriceWithoutPDVKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceWithoutPDVKeyReleased
-        if (jcbPDV.getSelectedIndex() != -1) {
+        if (jcbPDV.getSelectedIndex() != -1 && !txtPriceWithoutPDV.getText().isEmpty()) {
             double price = Double.parseDouble(txtPriceWithoutPDV.getText()) * (1 + ((PDV) jcbPDV.getSelectedItem()).getPercent());
             txtPriceWithPDV.setText(price + "");
+        }
+        if (txtPriceWithoutPDV.getText().isEmpty()) {
+            txtPriceWithPDV.setText("");
         }
     }//GEN-LAST:event_txtPriceWithoutPDVKeyReleased
 
@@ -319,7 +337,24 @@ public class FrmPriceList extends javax.swing.JFrame {
     }//GEN-LAST:event_btnRemoveActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        
+        if (jdcDateFrom.getDate() == null || jdcDateTo.getDate() == null || jdcDateFrom.getDate().before(new Date()) || jdcDateFrom.getDate().after(jdcDateTo.getDate())) {
+            JOptionPane.showMessageDialog(this, "Invalid dates!");
+            return;
+        }
+        if (((PriceListItemTableModel) tblPriceListItems.getModel()).getItems().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please add price list items!");
+            return;
+        }
+
+        try {
+            PriceList pl = getPriceList();
+            Controller.getInstance().addPriceList(pl);
+            JOptionPane.showMessageDialog(this, "Price list successfully saved!");
+            this.dispose();
+        } catch (Exception ex) {
+            Logger.getLogger(FrmPriceList.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "Price list unsuccessfully saved!");
+        }
     }//GEN-LAST:event_btnSaveActionPerformed
 
 
@@ -329,6 +364,7 @@ public class FrmPriceList extends javax.swing.JFrame {
     private javax.swing.JButton btnRemove;
     private javax.swing.JButton btnSave;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -352,6 +388,12 @@ public class FrmPriceList extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void prepareForm() {
+        ImageIcon icon = new ImageIcon(getClass().getResource("/icons/pricelist.jpg"));
+        Image img = icon.getImage();
+        Image imgScale = img.getScaledInstance(jLabel10.getWidth(), jLabel10.getWidth(), Image.SCALE_SMOOTH);
+        ImageIcon scaledIcon = new ImageIcon(imgScale);
+        jLabel10.setIcon(scaledIcon);
+        
         tblPriceListItems.setModel(new PriceListItemTableModel());
         tblPriceListItems.setShowHorizontalLines(true);
         try {
@@ -365,7 +407,7 @@ public class FrmPriceList extends javax.swing.JFrame {
             Logger.getLogger(FrmPriceList.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private PriceListItem getInputData() {
         PriceListItem pli = new PriceListItem();
         pli.setPrice(BigDecimal.valueOf(Double.valueOf(txtPriceWithPDV.getText())));
@@ -375,7 +417,7 @@ public class FrmPriceList extends javax.swing.JFrame {
         pli.setTypeOfVehicle((TypeOfVehicle) jcbTypeOfVehicle.getSelectedItem());
         return pli;
     }
-    
+
     private void clearForm() {
         txtPriceWithoutPDV.setText("");
         txtPriceWithPDV.setText("");
@@ -383,5 +425,13 @@ public class FrmPriceList extends javax.swing.JFrame {
         jcbPDV.setSelectedIndex(-1);
         jcbCurrency.setSelectedIndex(-1);
         jcbType.setSelectedIndex(-1);
+    }
+
+    private PriceList getPriceList() {
+        PriceList pl = new PriceList();
+        pl.setDateFrom(jdcDateFrom.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        pl.setDateTo(jdcDateTo.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+        pl.setPriceListItems(((PriceListItemTableModel) tblPriceListItems.getModel()).getItems());
+        return pl;
     }
 }

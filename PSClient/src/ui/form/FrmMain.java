@@ -15,6 +15,7 @@ public class FrmMain extends javax.swing.JFrame {
     public FrmMain() {
         initComponents();
         setLocationRelativeTo(null);
+        setResizable(false);
     }
 
     @SuppressWarnings("unchecked")

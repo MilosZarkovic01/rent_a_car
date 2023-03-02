@@ -23,5 +23,7 @@ public enum Operation {
     GET_ALL_RENTINGS,
     GET_PRICE_LIST_ITEMS,
     ADD_RENTING,
-    GET_ALL_PDVS;
+    DELETE_RENTING,
+    GET_ALL_PDVS,
+    ADD_PRICE_LIST;
 }

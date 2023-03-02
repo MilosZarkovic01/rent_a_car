@@ -13,6 +13,7 @@ import repository.dbb.VehicleDBBroker;
 import domain.Administrator;
 import domain.Client;
 import domain.PDV;
+import domain.PriceList;
 import domain.PriceListItem;
 import domain.Renting;
 import domain.TypeOfVehicle;
@@ -20,9 +21,11 @@ import domain.Vehicle;
 import java.util.ArrayList;
 import java.util.List;
 import repository.dbb.PdvDBBroker;
+import repository.dbb.PriceListDBBroker;
 import repository.dbb.impl.RepositoryDBAdministrator;
 import repository.dbb.impl.RepositoryDBClient;
 import repository.dbb.impl.RepositoryDBPdv;
+import repository.dbb.impl.RepositoryDBPriceList;
 import repository.dbb.impl.RepositoryDBPriceListItem;
 import repository.dbb.impl.RepositoryDBRenting;
 import repository.dbb.impl.RepositoryDBTypeOfVehicle;
@@ -47,6 +50,7 @@ public class Controller {
     private final RentingDBBroker repositoryRenting;
     private final PriceListItemDBBroker repositoryPriceListItem;
     private final PdvDBBroker repositoryPDV;
+    private final PriceListDBBroker repositoryPriceList;
 
     private Controller() {
         this.activeClients = new ArrayList<>();
@@ -57,6 +61,7 @@ public class Controller {
         this.repositoryRenting = new RepositoryDBRenting();
         this.repositoryPriceListItem = new RepositoryDBPriceListItem();
         this.repositoryPDV = new RepositoryDBPdv();
+        this.repositoryPriceList = new RepositoryDBPriceList();
     }
 
     public static Controller getInstance() {
@@ -157,8 +162,16 @@ public class Controller {
     public void addRenting(Renting renting) throws Exception {
         repositoryRenting.add(renting);
     }
+    
+    public void deleteRenting(Renting renting) throws Exception{
+        repositoryRenting.delete(renting);
+    }
 
     public List<PDV> getAllPDVs() throws Exception {
         return repositoryPDV.getAll();
+    }
+    
+    public void addPriceList(PriceList pl) throws Exception{
+        repositoryPriceList.add(pl);
     }
 }

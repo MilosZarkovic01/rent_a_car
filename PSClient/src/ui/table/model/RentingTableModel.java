@@ -69,4 +69,9 @@ public class RentingTableModel extends AbstractTableModel {
     public void update() {
         fireTableDataChanged();
     }
+
+    public void remove(int index) {
+        rentings.remove(index);
+        fireTableDataChanged();
+    }
 }

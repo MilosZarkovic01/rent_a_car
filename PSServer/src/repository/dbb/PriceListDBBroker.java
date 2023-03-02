@@ -4,15 +4,12 @@
  */
 package repository.dbb;
 
-import domain.Renting;
-import java.util.List;
+import domain.PriceList;
 
 /**
  *
  * @author Somika
  */
-public interface RentingDBBroker {
-    List<Renting> getAll() throws Exception;
-    void add (Renting renting) throws Exception;
-    void delete(Renting renting) throws Exception;
+public interface PriceListDBBroker {
+    void add(PriceList pl) throws Exception;
 }

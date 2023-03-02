@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import communication.Recеiver;
 import domain.Client;
 import domain.PDV;
+import domain.PriceList;
 import domain.PriceListItem;
 import domain.Renting;
 import domain.TypeOfVehicle;
@@ -250,6 +251,15 @@ public class Controller {
         }
     }
 
+    public void deleteRenting(Renting renting) throws Exception {
+        Request request = new Request(Operation.DELETE_RENTING, renting);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() != null) {
+            throw response.getException();
+        }
+    }
+
     public BigDecimal ExchangeRate(BigDecimal amount, Currency currency) {
         switch (currency.toString()) {
             case "USD":
@@ -270,6 +280,15 @@ public class Controller {
             return (List<PDV>) response.getResult();
         } else {
             return null;
+        }
+    }
+
+    public void addPriceList(PriceList pl) throws Exception {
+        Request request = new Request(Operation.ADD_PRICE_LIST, pl);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() != null) {
+            throw response.getException();
         }
     }
 }

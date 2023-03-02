@@ -52,8 +52,9 @@ public class FrmClient extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblClients = new javax.swing.JTable();
         btnAdd = new javax.swing.JButton();
-        txtTitle = new javax.swing.JTextField();
         btnClose = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
         jCheckBoxMenuItem1.setSelected(true);
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
@@ -226,17 +227,35 @@ public class FrmClient extends javax.swing.JFrame {
             }
         });
 
-        txtTitle.setBackground(new java.awt.Color(51, 153, 255));
-        txtTitle.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
-        txtTitle.setForeground(new java.awt.Color(255, 255, 255));
-        txtTitle.setText("       Clients");
-
         btnClose.setText("Close");
         btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCloseActionPerformed(evt);
             }
         });
+
+        jPanel3.setBackground(new java.awt.Color(51, 153, 255));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 48)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Clients");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(63, 63, 63)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addComponent(jLabel1)
+                .addContainerGap(32, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -254,13 +273,13 @@ public class FrmClient extends javax.swing.JFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnClose, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(25, 25, 25))
-            .addComponent(txtTitle)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(txtTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -372,7 +391,6 @@ public class FrmClient extends javax.swing.JFrame {
             txtLastName.setText("");
             txtTelNumber.setText("");
 
-            txtTitle.setEditable(false);
             txtFirstName.setEditable(false);
             txtLastName.setEditable(false);
             txtTelNumber.setEditable(false);
@@ -400,8 +418,10 @@ public class FrmClient extends javax.swing.JFrame {
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
@@ -418,7 +438,6 @@ public class FrmClient extends javax.swing.JFrame {
     private javax.swing.JTextField txtLastName;
     private javax.swing.JTextField txtLastName1;
     private javax.swing.JTextField txtTelNumber;
-    private javax.swing.JTextField txtTitle;
     // End of variables declaration//GEN-END:variables
 
     private void prepareForm() {
@@ -426,7 +445,6 @@ public class FrmClient extends javax.swing.JFrame {
         txtLastName.setText("");
         txtTelNumber.setText("");
 
-        txtTitle.setEditable(false);
         txtFirstName.setEditable(false);
         txtLastName.setEditable(false);
         txtTelNumber.setEditable(false);
