@@ -11,7 +11,7 @@ import java.util.Objects;
  *
  * @author Somika
  */
-public class PDV implements Serializable{
+public class PDV implements Serializable {
 
     private Long id;
     private double percent;
@@ -63,7 +63,7 @@ public class PDV implements Serializable{
 
     @Override
     public String toString() {
-        return "PDV{" + "id=" + id + ", percent=" + percent + '}';
+        return percent + "";
     }
 
 }

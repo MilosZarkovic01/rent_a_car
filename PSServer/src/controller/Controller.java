@@ -4,26 +4,29 @@
  */
 package controller;
 
-import databasebroker.AdministratorDBBroker;
-import databasebroker.ClientDBBroker;
-import databasebroker.PriceListItemDBBroker;
-import databasebroker.RentingDBBroker;
-import databasebroker.TypeOfVehicleDBBroker;
-import databasebroker.VehicleDBBroker;
+import repository.dbb.AdministratorDBBroker;
+import repository.dbb.ClientDBBroker;
+import repository.dbb.PriceListItemDBBroker;
+import repository.dbb.RentingDBBroker;
+import repository.dbb.TypeOfVehicleDBBroker;
+import repository.dbb.VehicleDBBroker;
 import domain.Administrator;
 import domain.Client;
+import domain.PDV;
 import domain.PriceListItem;
 import domain.Renting;
 import domain.TypeOfVehicle;
 import domain.Vehicle;
 import java.util.ArrayList;
 import java.util.List;
-import repository.impl.RepositoryDBAdministrator;
-import repository.impl.RepositoryDBClient;
-import repository.impl.RepositoryDBPriceListItem;
-import repository.impl.RepositoryDBRenting;
-import repository.impl.RepositoryDBTypeOfVehicle;
-import repository.impl.RepositoryDBVehicle;
+import repository.dbb.PdvDBBroker;
+import repository.dbb.impl.RepositoryDBAdministrator;
+import repository.dbb.impl.RepositoryDBClient;
+import repository.dbb.impl.RepositoryDBPdv;
+import repository.dbb.impl.RepositoryDBPriceListItem;
+import repository.dbb.impl.RepositoryDBRenting;
+import repository.dbb.impl.RepositoryDBTypeOfVehicle;
+import repository.dbb.impl.RepositoryDBVehicle;
 import thread.ClientThread;
 import ui.form.MainForm;
 
@@ -43,6 +46,7 @@ public class Controller {
     private final ClientDBBroker repositoryClient;
     private final RentingDBBroker repositoryRenting;
     private final PriceListItemDBBroker repositoryPriceListItem;
+    private final PdvDBBroker repositoryPDV;
 
     private Controller() {
         this.activeClients = new ArrayList<>();
@@ -52,6 +56,7 @@ public class Controller {
         this.repositoryClient = new RepositoryDBClient();
         this.repositoryRenting = new RepositoryDBRenting();
         this.repositoryPriceListItem = new RepositoryDBPriceListItem();
+        this.repositoryPDV = new RepositoryDBPdv();
     }
 
     public static Controller getInstance() {
@@ -151,5 +156,9 @@ public class Controller {
 
     public void addRenting(Renting renting) throws Exception {
         repositoryRenting.add(renting);
+    }
+
+    public List<PDV> getAllPDVs() throws Exception {
+        return repositoryPDV.getAll();
     }
 }

@@ -16,6 +16,7 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import ui.table.model.VehicleTableModel;
@@ -233,7 +234,7 @@ public class FrmAddRenting extends javax.swing.JFrame {
                             .addComponent(jcbClient, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jdcDateFrom, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                             .addComponent(jdcDateTo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(578, 578, 578)))
+                        .addGap(575, 575, 575)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 82, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(17, 17, 17))
@@ -320,6 +321,7 @@ public class FrmAddRenting extends javax.swing.JFrame {
         }
 
         try {
+            //jcbPriceListItems.setModel(new DefaultComboBoxModel(Controller.getInstance().getPriceListItems(((VehicleTableModel) tblAvailableVehicles.getModel()).getTypeOfVehicle(tblAvailableVehicles.getSelectedRow())).toArray()));
             for (PriceListItem priceListItem : Controller.getInstance().getPriceListItems(((VehicleTableModel) tblAvailableVehicles.getModel()).getTypeOfVehicle(tblAvailableVehicles.getSelectedRow()))) {
                 jcbPriceListItems.addItem(priceListItem);
             }

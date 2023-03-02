@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import communication.Recеiver;
 import domain.Client;
+import domain.PDV;
 import domain.PriceListItem;
 import domain.Renting;
 import domain.TypeOfVehicle;
@@ -258,6 +259,17 @@ public class Controller {
             case "RSD":
             default:
                 return amount;
+        }
+    }
+
+    public List<PDV> getAllPDVs() throws Exception {
+        Request request = new Request(Operation.GET_ALL_PDVS);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() == null) {
+            return (List<PDV>) response.getResult();
+        } else {
+            return null;
         }
     }
 }
