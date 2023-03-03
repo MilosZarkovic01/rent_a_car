@@ -311,7 +311,7 @@ public class FrmAddRenting extends javax.swing.JFrame {
             return;
         }
         PriceListItem item = ((PriceListItem) jcbPriceListItems.getSelectedItem());
-        lblTotalAmount.setText(Controller.getInstance().getTotalAmount(jdcDateFrom.getDate(), jdcDateTo.getDate(), item.getTypeOfPriceListItem(), item.getPrice()).setScale(5, RoundingMode.HALF_UP) + " " + item.getCurrency());
+        lblTotalAmount.setText(Controller.getInstance().getTotalAmount(jdcDateFrom.getDate(), jdcDateTo.getDate(), item.getTypeOfPriceListItem(), item.getPrice()).setScale(3, RoundingMode.HALF_UP) + " " + item.getCurrency());
     }//GEN-LAST:event_btnCalculateActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -337,9 +337,9 @@ public class FrmAddRenting extends javax.swing.JFrame {
         }
 
         try {
-            //jcbPriceListItems.setModel(new DefaultComboBoxModel(Controller.getInstance().getPriceListItems(((VehicleTableModel) tblAvailableVehicles.getModel()).getTypeOfVehicle(tblAvailableVehicles.getSelectedRow())).toArray()));
             for (PriceListItem priceListItem : Controller.getInstance().getPriceListItems(((VehicleTableModel) tblAvailableVehicles.getModel()).getTypeOfVehicle(tblAvailableVehicles.getSelectedRow()))) {
                 jcbPriceListItems.addItem(priceListItem);
+                System.out.println(priceListItem);
             }
         } catch (Exception ex) {
             Logger.getLogger(FrmAddRenting.class.getName()).log(Level.SEVERE, null, ex);

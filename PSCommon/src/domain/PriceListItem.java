@@ -95,7 +95,7 @@ public class PriceListItem implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 5;
+        int hash = 3;
         return hash;
     }
 
@@ -111,7 +111,7 @@ public class PriceListItem implements Serializable {
             return false;
         }
         final PriceListItem other = (PriceListItem) obj;
-        return Objects.equals(this.priceList, other.priceList);
+        return Objects.equals(this.id, other.id);
     }
 
     @Override
