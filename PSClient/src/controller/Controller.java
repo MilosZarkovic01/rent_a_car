@@ -22,6 +22,7 @@ import domain.PriceListItem;
 import domain.Renting;
 import domain.TypeOfVehicle;
 import enumeration.Currency;
+import enumeration.TypeOfPriceListItem;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -237,9 +238,17 @@ public class Controller {
         }
     }
 
-    public double getDuration(Date dateFrom, Date dateTo) {
+    public BigDecimal getTotalAmount(Date dateFrom, Date dateTo, TypeOfPriceListItem type, BigDecimal price) {
         long diff = dateTo.getTime() - dateFrom.getTime();
-        return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
+        long duration = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
+        switch (type.toString()) {
+            case "PERDAY":
+                return price.multiply(new BigDecimal(duration));
+            case "PERHOUR":
+                return price.multiply(new BigDecimal(duration)).multiply(new BigDecimal(24));
+            default:
+                throw new AssertionError();
+        }
     }
 
     public void addRenting(Renting renting) throws Exception {

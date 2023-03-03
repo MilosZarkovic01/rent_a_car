@@ -112,6 +112,12 @@ public class FrmPriceList extends javax.swing.JFrame {
 
         jLabel9.setText("Price with PDV:");
 
+        jcbPDV.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jcbPDVItemStateChanged(evt);
+            }
+        });
+
         txtPriceWithPDV.setEnabled(false);
 
         jcbCurrency.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "RSD", "EUR", "USD" }));
@@ -313,6 +319,10 @@ public class FrmPriceList extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void txtPriceWithoutPDVKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPriceWithoutPDVKeyReleased
+        calculatePrice();
+    }//GEN-LAST:event_txtPriceWithoutPDVKeyReleased
+
+    private void calculatePrice() throws NumberFormatException {
         if (jcbPDV.getSelectedIndex() != -1 && !txtPriceWithoutPDV.getText().isEmpty()) {
             double price = Double.parseDouble(txtPriceWithoutPDV.getText()) * (1 + ((PDV) jcbPDV.getSelectedItem()).getPercent());
             txtPriceWithPDV.setText(price + "");
@@ -320,7 +330,7 @@ public class FrmPriceList extends javax.swing.JFrame {
         if (txtPriceWithoutPDV.getText().isEmpty()) {
             txtPriceWithPDV.setText("");
         }
-    }//GEN-LAST:event_txtPriceWithoutPDVKeyReleased
+    }
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         PriceListItem pli = getInputData();
@@ -356,6 +366,10 @@ public class FrmPriceList extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Price list unsuccessfully saved!");
         }
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void jcbPDVItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jcbPDVItemStateChanged
+        calculatePrice();
+    }//GEN-LAST:event_jcbPDVItemStateChanged
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

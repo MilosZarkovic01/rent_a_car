@@ -36,11 +36,9 @@ public class ServerThread extends Thread {
         try {
             serverSocket = new ServerSocket(port);
             Controller.getInstance().getMainForm().setStatus("Server is running on port: " + port, false);
-            //System.out.println("Server je pokrenut");
             Socket socket;
             while (signal) {
                 socket = serverSocket.accept();
-                //System.out.println("Klijent se povezao");
                 ClientThread client = new ClientThread(socket);
                 clients.add(client);
                 
@@ -61,9 +59,8 @@ public class ServerThread extends Thread {
             Controller.getInstance().setActiveAdmins(new ArrayList<>());
             signal = false;
             serverSocket.close();
-            System.out.println("Server je zaustavljen");
             Controller.getInstance().getMainForm().prepareTable();
-            Controller.getInstance().getMainForm().setStatus("Server je prekinut!", true);
+            Controller.getInstance().getMainForm().setStatus("Server stopped!", true);
         } catch (IOException ex) {
             Logger.getLogger(ServerThread.class.getName()).log(Level.SEVERE, null, ex);
         }

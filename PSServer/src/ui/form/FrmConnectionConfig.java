@@ -107,7 +107,7 @@ public class FrmConnectionConfig extends javax.swing.JFrame {
         if (!address.isEmpty() && !port.isEmpty()) {
             ConnectionConfig.getInstance().setAddress(address);
             ConnectionConfig.getInstance().setPort(port);
-            JOptionPane.showMessageDialog(this, "Uspesno izvrsena izmena!");
+            JOptionPane.showMessageDialog(this, "Successfully updated!");
             dispose();
         }
     }//GEN-LAST:event_btnSubmitActionPerformed

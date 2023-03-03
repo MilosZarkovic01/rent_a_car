@@ -122,7 +122,7 @@ public class FrmDBConfig extends javax.swing.JFrame {
         DatabaseConfiguration.getInstance().setUsername(user);
         DatabaseConfiguration.getInstance().setUrl(url);
         
-        JOptionPane.showMessageDialog(this, "Uspesno izvrsena izmena!");
+        JOptionPane.showMessageDialog(this, "Successfully updated!");
         dispose();
     }//GEN-LAST:event_btnSubmitActionPerformed
 

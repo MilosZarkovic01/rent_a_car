@@ -10,8 +10,10 @@ import domain.PriceListItem;
 import domain.Renting;
 import domain.Vehicle;
 import enumeration.Currency;
+import enumeration.TypeOfPriceListItem;
 import java.awt.Image;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.logging.Level;
@@ -26,6 +28,8 @@ import ui.table.model.VehicleTableModel;
  * @author Somika
  */
 public class FrmAddRenting extends javax.swing.JFrame {
+
+    Date currentDate;
 
     public FrmAddRenting() {
         initComponents();
@@ -188,13 +192,13 @@ public class FrmAddRenting extends javax.swing.JFrame {
                     .addComponent(btnCalculate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnPriceListItems, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(107, 107, 107)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(lblTotalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jcbPriceListItems, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(113, Short.MAX_VALUE))
+                        .addComponent(lblTotalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcbPriceListItems, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -227,8 +231,8 @@ public class FrmAddRenting extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(55, 55, 55)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -245,7 +249,7 @@ public class FrmAddRenting extends javax.swing.JFrame {
                                     .addComponent(jdcDateFrom, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                                     .addComponent(jdcDateTo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(391, 391, 391)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(20, 20, 20)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
@@ -296,7 +300,8 @@ public class FrmAddRenting extends javax.swing.JFrame {
             return;
         }
 
-        if (jdcDateFrom.getDate() == null || jdcDateTo.getDate() == null || jdcDateFrom.getDate().before(new Date()) || jdcDateFrom.getDate().after(jdcDateTo.getDate())) {
+        if (jdcDateFrom.getDate() == null || jdcDateTo.getDate() == null || jdcDateFrom.getDate().before(currentDate) || jdcDateFrom.getDate().after(jdcDateTo.getDate())) {
+
             JOptionPane.showMessageDialog(this, "Invalid dates!");
             return;
         }
@@ -305,10 +310,8 @@ public class FrmAddRenting extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Select price list item!");
             return;
         }
-
-        double totalAmount = Controller.getInstance().getDuration(jdcDateFrom.getDate(), jdcDateTo.getDate()) * ((PriceListItem) jcbPriceListItems.getSelectedItem()).getPrice().doubleValue();
-
-        lblTotalAmount.setText(totalAmount + " " + ((PriceListItem) jcbPriceListItems.getSelectedItem()).getCurrency());
+        PriceListItem item = ((PriceListItem) jcbPriceListItems.getSelectedItem());
+        lblTotalAmount.setText(Controller.getInstance().getTotalAmount(jdcDateFrom.getDate(), jdcDateTo.getDate(), item.getTypeOfPriceListItem(), item.getPrice()).setScale(5, RoundingMode.HALF_UP) + " " + item.getCurrency());
     }//GEN-LAST:event_btnCalculateActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -390,6 +393,8 @@ public class FrmAddRenting extends javax.swing.JFrame {
             }
 
             jcbClient.setSelectedIndex(-1);
+
+            currentDate = new Date();
         } catch (Exception ex) {
             Logger.getLogger(FrmAddRenting.class.getName()).log(Level.SEVERE, null, ex);
         }
