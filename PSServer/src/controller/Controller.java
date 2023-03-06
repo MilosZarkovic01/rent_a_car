@@ -38,11 +38,11 @@ import ui.form.MainForm;
  * @author Somika
  */
 public class Controller {
-
+    
     private static Controller instance;
     private MainForm mainForm;
     private List<ClientThread> activeClients;
-
+    
     private final AdministratorDBBroker repositoryAdministrator;
     private final VehicleDBBroker repositoryVehicle;
     private final TypeOfVehicleDBBroker repositoryTypeOfVehicle;
@@ -51,7 +51,7 @@ public class Controller {
     private final PriceListItemDBBroker repositoryPriceListItem;
     private final PdvDBBroker repositoryPDV;
     private final PriceListDBBroker repositoryPriceList;
-
+    
     private Controller() {
         this.activeClients = new ArrayList<>();
         this.repositoryAdministrator = new RepositoryDBAdministrator();
@@ -63,22 +63,22 @@ public class Controller {
         this.repositoryPDV = new RepositoryDBPdv();
         this.repositoryPriceList = new RepositoryDBPriceList();
     }
-
+    
     public static Controller getInstance() {
         if (instance == null) {
             instance = new Controller();
         }
         return instance;
     }
-
+    
     public MainForm getMainForm() {
         return mainForm;
     }
-
+    
     public void setMainForm(MainForm mainForm) {
         this.mainForm = mainForm;
     }
-
+    
     public boolean isLogged(Administrator administrator) {
         for (ClientThread activeClient : activeClients) {
             if (activeClient.getAdministrator().equals(administrator)) {
@@ -88,11 +88,11 @@ public class Controller {
         }
         return false;
     }
-
+    
     public void addActiveAdministrator(ClientThread client) {
         activeClients.add(client);
     }
-
+    
     public Administrator login(String username, String password) throws Exception {
         List<Administrator> administrators = repositoryAdministrator.getAll();
         for (Administrator administrator : administrators) {
@@ -102,76 +102,84 @@ public class Controller {
         }
         throw new Exception("Unknown user!");
     }
-
+    
     public List<ClientThread> getActiveAdmins() {
         return activeClients;
     }
-
+    
     public void setActiveAdmins(List<ClientThread> activeClients) {
         this.activeClients = activeClients;
     }
-
+    
+    public void logout(Administrator admin) {
+        for (ClientThread client : activeClients) {
+            if (admin.equals(client.getAdministrator())) {
+                mainForm.logout(admin);
+            }
+        }
+    }
+    
     public List<Vehicle> getAllVehicles() {
         return repositoryVehicle.getAll();
     }
-
+    
     public List<Vehicle> getAvailableVehicles() {
         return repositoryVehicle.getAvailable();
     }
-
+    
     public List<TypeOfVehicle> getAllTypes() {
         return repositoryTypeOfVehicle.getAll();
     }
-
+    
     public void deleteVehicle(Vehicle vehicle) throws Exception {
         repositoryVehicle.delete(vehicle);
     }
-
+    
     public void saveVehicle(Vehicle vehicle) throws Exception {
         repositoryVehicle.add(vehicle);
     }
-
+    
     public void updateVehicle(Vehicle vehicle) throws Exception {
         repositoryVehicle.update(vehicle);
     }
-
+    
     public List<Client> getAllClients() {
         return repositoryClient.getAllClients();
     }
-
+    
     public void updateClient(Client client) throws Exception {
         repositoryClient.update(client);
     }
-
+    
     public void addClient(Client client) throws Exception {
         repositoryClient.add(client);
     }
-
+    
     public List<Renting> getClientRentings(Client client) throws Exception {
         return repositoryClient.getClientRentings(client);
     }
-
+    
     public List<Renting> getAllRentings() throws Exception {
         return repositoryRenting.getAll();
     }
-
+    
     public List<PriceListItem> getPriceListItems(TypeOfVehicle tov) throws Exception {
         return repositoryPriceListItem.getPriceListItems(tov);
     }
-
+    
     public void addRenting(Renting renting) throws Exception {
         repositoryRenting.add(renting);
     }
     
-    public void deleteRenting(Renting renting) throws Exception{
+    public void deleteRenting(Renting renting) throws Exception {
         repositoryRenting.delete(renting);
     }
-
+    
     public List<PDV> getAllPDVs() throws Exception {
         return repositoryPDV.getAll();
     }
     
-    public void addPriceList(PriceList pl) throws Exception{
+    public void addPriceList(PriceList pl) throws Exception {
         repositoryPriceList.add(pl);
     }
 }

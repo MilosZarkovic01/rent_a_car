@@ -339,7 +339,6 @@ public class FrmAddRenting extends javax.swing.JFrame {
         try {
             for (PriceListItem priceListItem : Controller.getInstance().getPriceListItems(((VehicleTableModel) tblAvailableVehicles.getModel()).getTypeOfVehicle(tblAvailableVehicles.getSelectedRow()))) {
                 jcbPriceListItems.addItem(priceListItem);
-                System.out.println(priceListItem);
             }
         } catch (Exception ex) {
             Logger.getLogger(FrmAddRenting.class.getName()).log(Level.SEVERE, null, ex);

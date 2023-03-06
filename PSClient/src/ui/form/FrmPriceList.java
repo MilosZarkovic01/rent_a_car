@@ -333,6 +333,10 @@ public class FrmPriceList extends javax.swing.JFrame {
     }
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        if (jcbTypeOfVehicle.getSelectedItem() == null || jcbPDV.getSelectedItem() == null || txtPriceWithoutPDV.getText().isEmpty() || jcbCurrency.getSelectedItem() == null || jcbType.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "You must enter all values!");
+            return;
+        }
         PriceListItem pli = getInputData();
         ((PriceListItemTableModel) tblPriceListItems.getModel()).add(pli);
         clearForm();
@@ -407,7 +411,7 @@ public class FrmPriceList extends javax.swing.JFrame {
         Image imgScale = img.getScaledInstance(jLabel10.getWidth(), jLabel10.getWidth(), Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(imgScale);
         jLabel10.setIcon(scaledIcon);
-        
+
         tblPriceListItems.setModel(new PriceListItemTableModel());
         tblPriceListItems.setShowHorizontalLines(true);
         try {

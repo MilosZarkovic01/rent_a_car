@@ -10,6 +10,7 @@ package enumeration;
  */
 public enum Operation {
     LOG_IN,
+    LOG_OUT,
     GET_ALL_VEHICLES,
     GET_AVAILABLE_VEHICLES,
     GET_ALL_TYPES,

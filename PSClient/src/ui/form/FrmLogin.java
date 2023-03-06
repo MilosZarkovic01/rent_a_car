@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import session.Session;
 
 /**
  *
@@ -53,22 +54,12 @@ public class FrmLogin extends javax.swing.JFrame {
         txtUser.setForeground(new java.awt.Color(255, 255, 255));
         txtUser.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
         txtUser.setOpaque(true);
-        txtUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUserActionPerformed(evt);
-            }
-        });
 
         txtPassword.setBackground(new java.awt.Color(51, 153, 255));
         txtPassword.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         txtPassword.setForeground(new java.awt.Color(255, 255, 255));
         txtPassword.setBorder(javax.swing.BorderFactory.createMatteBorder(0, 0, 2, 0, new java.awt.Color(255, 255, 255)));
         txtPassword.setOpaque(true);
-        txtPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtPasswordActionPerformed(evt);
-            }
-        });
 
         jCheckBox1.setForeground(new java.awt.Color(255, 255, 255));
         jCheckBox1.setText("Show password");
@@ -178,6 +169,7 @@ public class FrmLogin extends javax.swing.JFrame {
                 resetForm();
                 return;
             }
+            Session.getInstance().setAdministrator(administrator);
             JOptionPane.showMessageDialog(this, "Login success. Welcome " + administrator.getUsername());
             new FrmMain().setVisible(true);
             this.dispose();
@@ -185,14 +177,6 @@ public class FrmLogin extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ex.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void txtPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtPasswordActionPerformed
-
-    private void txtUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUserActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -213,14 +197,13 @@ public class FrmLogin extends javax.swing.JFrame {
         Image imgScale = img.getScaledInstance(jLabel3.getWidth(), jLabel3.getWidth(), Image.SCALE_SMOOTH);
         ImageIcon scaledIcon = new ImageIcon(imgScale);
         jLabel3.setIcon(scaledIcon);
-        
+
         ImageIcon icon1 = new ImageIcon(getClass().getResource("/icons/lock.jpg"));
         Image img1 = icon1.getImage();
         Image imgScale1 = img1.getScaledInstance(jLabel5.getWidth(), jLabel5.getWidth(), Image.SCALE_SMOOTH);
         ImageIcon scaledIcon1 = new ImageIcon(imgScale1);
         jLabel5.setIcon(scaledIcon1);
-        
-        
+
         this.getContentPane().setBackground(new Color(51, 153, 255));
     }
 

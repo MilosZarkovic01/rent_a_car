@@ -28,6 +28,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import session.Session;
 import settings.ConnectionConfig;
 
 /**
@@ -68,12 +69,22 @@ public class Controller {
         Response response = (Response) receiver.receive();
 
         if (response.getException() == null) {
-            return administrator;
+            return (Administrator) response.getResult();
         } else if (response.getException().getMessage().equals("Administrator is already logged")) {
             administrator.setUsername("logged");
             return administrator;
         } else {
             return null;
+        }
+    }
+
+    public void logout() throws Exception {
+        Administrator admin = Session.getInstance().getAdministrator();
+        Request request = new Request(Operation.LOG_OUT, admin);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() != null) {
+            throw response.getException();
         }
     }
 

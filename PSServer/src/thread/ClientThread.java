@@ -24,13 +24,13 @@ import java.util.logging.Logger;
  * @author Somika
  */
 public class ClientThread extends Thread {
-    
+
     private final Socket socket;
     private final Sender sender;
     private final Recеiver recеiver;
     private boolean signal;
     private Administrator administrator;
-    
+
     public ClientThread(Socket socket) {
         this.socket = socket;
         sender = new Sender(socket);
@@ -38,7 +38,7 @@ public class ClientThread extends Thread {
         this.signal = true;
         start();
     }
-    
+
     @Override
     public void run() {
         if (!socket.isClosed()) {
@@ -52,15 +52,20 @@ public class ClientThread extends Thread {
                                 Administrator admin = (Administrator) request.getData();
                                 response.setResult(Controller.getInstance().login(admin.getUsername(), admin.getPassword()));
                                 administrator = (Administrator) response.getResult();
-                                
+
                                 boolean active = Controller.getInstance().isLogged(this.administrator);
-                                
+
                                 if (active) {
                                     response.setException(new Exception("Administrator is already logged"));
                                 } else {
                                     Controller.getInstance().addActiveAdministrator(this);
                                     Controller.getInstance().getMainForm().addLoggedAdministrator(administrator);
                                 }
+                                break;
+                            case LOG_OUT:
+                                Administrator ad = (Administrator) request.getData();
+                                Controller.getInstance().logout(ad);
+                                Controller.getInstance().getActiveAdmins().remove(this);
                                 break;
                             case GET_ALL_VEHICLES:
                                 response.setResult(Controller.getInstance().getAllVehicles());
@@ -121,19 +126,19 @@ public class ClientThread extends Thread {
                 }
             }
         }
-        
+
     }
-    
+
     public Socket getSocket() {
         return socket;
     }
-    
+
     public Administrator getAdministrator() {
         return administrator;
     }
-    
+
     public void setSignal(boolean signal) {
         this.signal = signal;
     }
-    
+
 }

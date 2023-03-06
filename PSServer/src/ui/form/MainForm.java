@@ -211,4 +211,8 @@ public class MainForm extends javax.swing.JFrame {
         ((AdministratorTableModel) tblAdministrators.getModel()).add(administrator);
     }
 
+    public void logout(Administrator admin) {
+        ((AdministratorTableModel) tblAdministrators.getModel()).remove(admin);
+    }
+
 }
