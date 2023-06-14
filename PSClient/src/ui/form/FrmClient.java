@@ -326,6 +326,10 @@ public class FrmClient extends javax.swing.JFrame {
             }
 
             if (selectedRow >= Controller.getInstance().getAllClients().size()) {
+                if (txtFirstName.getText().isEmpty() || txtLastName.getText().isEmpty() || txtTelNumber.getText().isEmpty()) {
+                    JOptionPane.showMessageDialog(this, "You must enter all values!");
+                    return;
+                }
                 Client newClient = new Client();
                 newClient.setFirstName(txtFirstName.getText());
                 newClient.setLastName(txtLastName.getText());

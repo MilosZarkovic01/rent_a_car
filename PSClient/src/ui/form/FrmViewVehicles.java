@@ -8,7 +8,6 @@ import consts.VehicleFormModes;
 import controller.Controller;
 import domain.TypeOfVehicle;
 import domain.Vehicle;
-import java.awt.Color;
 import ui.table.model.VehicleTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +21,17 @@ import javax.swing.JOptionPane;
  * @author Somika
  */
 public class FrmViewVehicles extends javax.swing.JFrame {
-
+    
     private List<Vehicle> vehicles;
     private List<Vehicle> filters;
-
+    
     public FrmViewVehicles() {
         initComponents();
         setLocationRelativeTo(null);
         vehicles = new ArrayList<>();
         populateForm();
     }
-
+    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -161,7 +160,7 @@ public class FrmViewVehicles extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "You must select the row!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
+        
         if (filters != null) {
             new FrmVehicle(filters.get(selectedRow), this, VehicleFormModes.VIEW).setVisible(true);
         } else {
@@ -172,11 +171,14 @@ public class FrmViewVehicles extends javax.swing.JFrame {
 
     private void btnFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFilterActionPerformed
         try {
+            if (jcbTypeOfVehicles.getSelectedItem() == null) {
+                return;
+            }
             vehicles = Controller.getInstance().getAllVehicles();
-
+            
             ((VehicleTableModel) tblVehicles.getModel()).setVehicles(vehicles);
             TypeOfVehicle tov = (TypeOfVehicle) jcbTypeOfVehicles.getSelectedItem();
-
+            
             filters = ((VehicleTableModel) tblVehicles.getModel()).filter(tov);
             ((VehicleTableModel) tblVehicles.getModel()).setVehicles(filters);
             ((VehicleTableModel) tblVehicles.getModel()).update();
@@ -192,6 +194,7 @@ public class FrmViewVehicles extends javax.swing.JFrame {
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
         ((VehicleTableModel) tblVehicles.getModel()).setVehicles(vehicles);
         ((VehicleTableModel) tblVehicles.getModel()).update();
+        jcbTypeOfVehicles.setSelectedIndex(-1);
         filters = null;
     }//GEN-LAST:event_btnResetActionPerformed
 
@@ -221,11 +224,11 @@ public class FrmViewVehicles extends javax.swing.JFrame {
             Logger.getLogger(FrmViewVehicles.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
+    
     public void remove(Vehicle vehicle) {
         ((VehicleTableModel) tblVehicles.getModel()).removeVehicle(vehicle);
     }
-
+    
     public void update() throws Exception {
         ((VehicleTableModel) tblVehicles.getModel()).setVehicles(Controller.getInstance().getAllVehicles());
         ((VehicleTableModel) tblVehicles.getModel()).update();

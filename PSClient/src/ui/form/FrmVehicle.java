@@ -320,7 +320,7 @@ public class FrmVehicle extends javax.swing.JFrame {
             }
             this.dispose();
         } catch (Exception ex) {
-            Logger.getLogger(FrmVehicle.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this, "This vehicle is currently rented and can't be deleted!", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
     }//GEN-LAST:event_btnDeleteActionPerformed
@@ -331,7 +331,10 @@ public class FrmVehicle extends javax.swing.JFrame {
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
         try {
-            //validate
+            if(txtBrand.getText().isEmpty() || txtModel.getText().isEmpty()||txtMileage.getText().isEmpty()){
+                JOptionPane.showMessageDialog(this, "Please enter all values!", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             if (Controller.getInstance().saveVehicle(getInputData())) {
                 JOptionPane.showMessageDialog(this, "The vehicle has been successfully saved!");
             }

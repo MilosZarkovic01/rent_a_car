@@ -16,8 +16,7 @@ import domain.PriceList;
 import domain.Renting;
 import domain.TypeOfVehicle;
 import domain.Vehicle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Date;
 
 /**
  *
@@ -101,7 +100,7 @@ public class ClientThread extends Thread {
                                 response.setResult(Controller.getInstance().getAllRentings());
                                 break;
                             case GET_PRICE_LIST_ITEMS:
-                                response.setResult(Controller.getInstance().getPriceListItems((TypeOfVehicle) request.getData()));
+                                response.setResult(Controller.getInstance().getPriceListItems((TypeOfVehicle) request.getData(), (Date) request.getData2()));
                                 break;
                             case ADD_RENTING:
                                 Controller.getInstance().addRenting((Renting) request.getData());
@@ -115,14 +114,17 @@ public class ClientThread extends Thread {
                             case ADD_PRICE_LIST:
                                 Controller.getInstance().addPriceList((PriceList) request.getData());
                                 break;
+                            case STOP_CLIENT_THREAD:
+                                setSignal(false);
+                                socket.close();
+                                return;
                         }
                     } catch (Exception ex) {
-                        ex.printStackTrace();
                         response.setException(ex);
                     }
                     sender.send(response);
                 } catch (Exception ex) {
-                    Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+                    System.out.println("One client disconnected!");
                 }
             }
         }

@@ -22,29 +22,27 @@ public class ServerThread extends Thread {
 
     private ServerSocket serverSocket;
     private List<ClientThread> clients;
-    boolean signal;
+    boolean serverRunning;
 
-    public ServerThread() {
-        this.signal = true;
+    public ServerThread() throws IOException {
+        this.serverRunning = true;
         clients = new ArrayList<>();
+        serverSocket = new ServerSocket(readPortNumber());
         start();
     }
 
     @Override
     public void run() {
-        int port = Integer.parseInt(ConnectionConfig.getInstance().getProperty("port"));
         try {
-            serverSocket = new ServerSocket(port);
-            Controller.getInstance().getMainForm().setStatus("Server is running on port: " + port, false);
+            Controller.getInstance().getMainForm().setStatus("Server is running on port: " + readPortNumber(), false);
             Socket socket;
-            while (signal) {
+            while (serverRunning) {
                 socket = serverSocket.accept();
                 ClientThread client = new ClientThread(socket);
                 clients.add(client);
-                
             }
         } catch (IOException ex) {
-
+            System.out.println("Server is down!");
         }
     }
 
@@ -54,10 +52,9 @@ public class ServerThread extends Thread {
                 client.setSignal(false);
                 client.getSocket().close();
             }
-            
             clients = new ArrayList<>();
             Controller.getInstance().setActiveAdmins(new ArrayList<>());
-            signal = false;
+            serverRunning = false;
             serverSocket.close();
             Controller.getInstance().getMainForm().prepareTable();
             Controller.getInstance().getMainForm().setStatus("Server stopped!", true);
@@ -66,4 +63,7 @@ public class ServerThread extends Thread {
         }
     }
 
+    private int readPortNumber() {
+        return Integer.parseInt(ConnectionConfig.getInstance().getProperty("port"));
+    }
 }

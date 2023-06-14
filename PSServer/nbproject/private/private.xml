@@ -3,9 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Somika/Desktop/ps_seminarski/PSServer/src/thread/ServerThread.java</file>
-            <file>file:/C:/Users/Somika/Desktop/ps_seminarski/PSServer/src/thread/ClientThread.java</file>
+            <file>file:/C:/Users/Somika/Desktop/ps_seminarski/PSServer/src/ui/form/MainForm.java</file>
+            <file>file:/C:/Users/Somika/Desktop/ps_seminarski/PSServer/src/ui/form/FrmDBConfig.java</file>
             <file>file:/C:/Users/Somika/Desktop/ps_seminarski/PSServer/src/main/Start.java</file>
+            <file>file:/C:/Users/Somika/Desktop/ps_seminarski/PSServer/src/repository/dbb/impl/RepositoryDBPriceListItem.java</file>
         </group>
     </open-files>
 </project-private>

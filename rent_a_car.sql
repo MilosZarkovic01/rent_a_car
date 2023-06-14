@@ -1,6 +1,6 @@
 /*
 SQLyog Community v13.1.7 (64 bit)
-MySQL - 10.4.27-MariaDB : Database - rent_a_car
+MySQL - 10.4.28-MariaDB : Database - rent_a_car
 *********************************************************************
 */
 
@@ -24,14 +24,15 @@ CREATE TABLE `administrator` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `username` varchar(10) NOT NULL,
   `password` varchar(10) NOT NULL,
-  `email` varchar(10) NOT NULL,
+  `email` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `administrator` */
 
 insert  into `administrator`(`id`,`username`,`password`,`email`) values 
-(1,'admin','admin','admin@gmai');
+(1,'admin','admin','admin@gmail'),
+(2,'somika','somika','somika@gma');
 
 /*Table structure for table `client` */
 
@@ -43,14 +44,18 @@ CREATE TABLE `client` (
   `lastname` varchar(15) NOT NULL,
   `telNumber` varchar(15) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `client` */
 
 insert  into `client`(`id`,`firstname`,`lastname`,`telNumber`) values 
 (1,'Milos','Zarkovic','0638195893'),
 (2,'Marko','Ilic','0657855361'),
-(3,'Ana','Markovic','0669149860');
+(3,'Anja','Markovic','0669149860'),
+(4,'Marko','Trisic','069247786'),
+(5,'Filip','Stojanovic','0665122865'),
+(6,'Marta','Petrovic','0642775486'),
+(7,'Sara','Ilic','0695568121');
 
 /*Table structure for table `pdv` */
 
@@ -78,13 +83,13 @@ CREATE TABLE `pricelist` (
   `dateFrom` date NOT NULL,
   `dateTo` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `pricelist` */
 
 insert  into `pricelist`(`id`,`dateFrom`,`dateTo`) values 
-(1,'2022-12-01','2022-12-15'),
-(2,'2022-12-16','2022-12-19');
+(3,'2023-06-01','2023-07-01'),
+(4,'2023-07-01','2023-09-01');
 
 /*Table structure for table `pricelistitem` */
 
@@ -98,20 +103,27 @@ CREATE TABLE `pricelistitem` (
   `pdv_fk` bigint(20) NOT NULL,
   `typeOfVehicle_fk` bigint(20) NOT NULL,
   `priceList_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`id`,`priceList_id`),
+  PRIMARY KEY (`id`),
   KEY `pdv_fk` (`pdv_fk`),
   KEY `typeOfVehicle_fk` (`typeOfVehicle_fk`),
-  CONSTRAINT `pricelistitem_ibfk_1` FOREIGN KEY (`pdv_fk`) REFERENCES `pdv` (`id`),
-  CONSTRAINT `pricelistitem_ibfk_2` FOREIGN KEY (`typeOfVehicle_fk`) REFERENCES `typeofvehicle` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  KEY `pricelistitem_ibfk_5` (`priceList_id`),
+  CONSTRAINT `pricelistitem_ibfk_5` FOREIGN KEY (`priceList_id`) REFERENCES `pricelist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `pricelistitem_ibfk_6` FOREIGN KEY (`pdv_fk`) REFERENCES `pdv` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `pricelistitem_ibfk_7` FOREIGN KEY (`typeOfVehicle_fk`) REFERENCES `typeofvehicle` (`id`) ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `pricelistitem` */
 
 insert  into `pricelistitem`(`id`,`price`,`typeOfPriceListItem`,`currency`,`pdv_fk`,`typeOfVehicle_fk`,`priceList_id`) values 
-(1,1200,'PERHOUR','RSD',2,2,1),
-(2,25,'PERHOUR','EUR',2,2,2),
-(3,89,'PERDAY','EUR',1,1,2),
-(4,30,'PERHOUR','EUR',3,3,2);
+(5,15000,'PERDAY','RSD',2,1,3),
+(6,126,'PERDAY','EUR',2,1,3),
+(7,59,'PERHOUR','USD',1,2,3),
+(8,17700,'PERDAY','RSD',1,2,3),
+(9,23760,'PERDAY','RSD',3,3,3),
+(10,15930,'PERDAY','RSD',1,1,4),
+(11,48,'PERHOUR','EUR',2,2,4),
+(12,13200,'PERDAY','RSD',3,3,4),
+(13,177,'PERDAY','EUR',1,1,4);
 
 /*Table structure for table `renting` */
 
@@ -133,12 +145,16 @@ CREATE TABLE `renting` (
   CONSTRAINT `renting_ibfk_1` FOREIGN KEY (`vehicle_fk`) REFERENCES `vehicle` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `renting_ibfk_2` FOREIGN KEY (`client_fk`) REFERENCES `client` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `renting_ibfk_3` FOREIGN KEY (`priceListItem_fk`) REFERENCES `pricelistitem` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `renting` */
 
 insert  into `renting`(`id`,`dateFrom`,`dateTo`,`totalAmount`,`currency`,`vehicle_fk`,`client_fk`,`priceListItem_fk`) values 
-(1,'2022-12-13','2022-12-14',180,'EUR',2,1,3);
+(2,'2023-06-12','2023-06-14',378,'EUR',1,1,6),
+(3,'2023-06-11','2023-06-13',71280,'RSD',4,1,9),
+(5,'2023-06-17','2023-06-21',88500,'RSD',3,5,8),
+(6,'2023-07-10','2023-07-18',1593,'EUR',10,7,13),
+(7,'2023-07-01','2023-07-06',576,'EUR',3,4,11);
 
 /*Table structure for table `typeofvehicle` */
 
@@ -170,17 +186,18 @@ CREATE TABLE `vehicle` (
   `typeOfVehicle_fk` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `typeOfVehicle_fk` (`typeOfVehicle_fk`),
-  CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`typeOfVehicle_fk`) REFERENCES `typeofvehicle` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `vehicle_ibfk_1` FOREIGN KEY (`typeOfVehicle_fk`) REFERENCES `typeofvehicle` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `vehicle` */
 
 insert  into `vehicle`(`id`,`brand`,`model`,`mileage`,`availability`,`typeOfVehicle_fk`) values 
-(1,'Mercedes-Benz','Maybach',88000,1,1),
-(2,'BMW','X6',42000,0,1),
-(3,'Suzuki','Hayabusa',17000,1,2),
-(4,'Honda','Ridgeline',111000,1,3),
-(5,'Toyota','Tundra',9000,0,3);
+(1,'Mercedes-Benz','Maybach',88000,0,1),
+(3,'Suzuki','Hayabusa',17000,0,2),
+(4,'Honda','Ridgeline',112000,0,3),
+(5,'Toyota','Tundra',9000,0,3),
+(8,'Audi','A5',88000,0,1),
+(10,'Mercedes-Benz','AMG-GT',42000,0,1);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

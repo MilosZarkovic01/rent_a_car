@@ -63,6 +63,8 @@ public class FrmAddRenting extends javax.swing.JFrame {
         btnPriceListItems = new javax.swing.JButton();
         jcbPriceListItems = new javax.swing.JComboBox<>();
         btnSave = new javax.swing.JButton();
+        jcbNumberOfHours = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -224,6 +226,10 @@ public class FrmAddRenting extends javax.swing.JFrame {
             }
         });
 
+        jcbNumberOfHours.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+
+        jLabel10.setText("For how many hours:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -248,7 +254,14 @@ public class FrmAddRenting extends javax.swing.JFrame {
                                     .addComponent(jcbClient, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jdcDateFrom, javax.swing.GroupLayout.DEFAULT_SIZE, 177, Short.MAX_VALUE)
                                     .addComponent(jdcDateTo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(391, 391, 391)))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(145, 145, 145)
+                                        .addComponent(jcbNumberOfHours, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGap(128, 128, 128)
+                                        .addComponent(jLabel10)))
+                                .addGap(211, 211, 211)))
                         .addGap(20, 20, 20)
                         .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -265,16 +278,20 @@ public class FrmAddRenting extends javax.swing.JFrame {
                     .addComponent(jLabel5)
                     .addComponent(jcbClient, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel6)
-                    .addComponent(jdcDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel6)
+                        .addComponent(jdcDateFrom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel10))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(jLabel7))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jdcDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jcbNumberOfHours, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jdcDateTo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -311,7 +328,8 @@ public class FrmAddRenting extends javax.swing.JFrame {
             return;
         }
         PriceListItem item = ((PriceListItem) jcbPriceListItems.getSelectedItem());
-        lblTotalAmount.setText(Controller.getInstance().getTotalAmount(jdcDateFrom.getDate(), jdcDateTo.getDate(), item.getTypeOfPriceListItem(), item.getPrice()).setScale(3, RoundingMode.HALF_UP) + " " + item.getCurrency());
+        int numberOfHours = Integer.parseInt((String) jcbNumberOfHours.getSelectedItem());
+        lblTotalAmount.setText(Controller.getInstance().getTotalAmount(jdcDateFrom.getDate(), jdcDateTo.getDate(), item.getTypeOfPriceListItem(), item.getPrice(),numberOfHours).setScale(3, RoundingMode.HALF_UP) + " " + item.getCurrency());
     }//GEN-LAST:event_btnCalculateActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -337,7 +355,7 @@ public class FrmAddRenting extends javax.swing.JFrame {
         }
 
         try {
-            for (PriceListItem priceListItem : Controller.getInstance().getPriceListItems(((VehicleTableModel) tblAvailableVehicles.getModel()).getTypeOfVehicle(tblAvailableVehicles.getSelectedRow()))) {
+            for (PriceListItem priceListItem : Controller.getInstance().getPriceListItems(((VehicleTableModel) tblAvailableVehicles.getModel()).getTypeOfVehicle(tblAvailableVehicles.getSelectedRow()),jdcDateFrom.getDate())) {
                 jcbPriceListItems.addItem(priceListItem);
             }
         } catch (Exception ex) {
@@ -351,6 +369,7 @@ public class FrmAddRenting extends javax.swing.JFrame {
     private javax.swing.JButton btnPriceListItems;
     private javax.swing.JButton btnSave;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -364,6 +383,7 @@ public class FrmAddRenting extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox<Client> jcbClient;
+    private javax.swing.JComboBox<String> jcbNumberOfHours;
     private javax.swing.JComboBox<PriceListItem> jcbPriceListItems;
     private com.toedter.calendar.JDateChooser jdcDateFrom;
     private com.toedter.calendar.JDateChooser jdcDateTo;
@@ -392,7 +412,7 @@ public class FrmAddRenting extends javax.swing.JFrame {
             }
 
             jcbClient.setSelectedIndex(-1);
-
+            
             currentDate = new Date();
         } catch (Exception ex) {
             Logger.getLogger(FrmAddRenting.class.getName()).log(Level.SEVERE, null, ex);

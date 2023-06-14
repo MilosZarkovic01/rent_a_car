@@ -25,9 +25,9 @@ import enumeration.Currency;
 import enumeration.TypeOfPriceListItem;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import session.Session;
 import settings.ConnectionConfig;
 
@@ -187,33 +187,27 @@ public class Controller {
     }
 
     public List<Client> searchClients(String firstname, String lastname, TypeOfVehicle tov) throws Exception {
-        List<Client> matchingClients = new ArrayList<>();
-        for (Client client : Controller.getInstance().getAllClients()) {
-            boolean match = true;
-            if (!firstname.isEmpty() && !client.getFirstName().contains(firstname)) {
-                match = false;
-            }
-            if (!lastname.isEmpty() && !client.getLastName().contains(lastname)) {
-                match = false;
-            }
-            if (tov != null) {
-                boolean found = false;
-                for (Renting renting : getClientRentings(client)) {
-                    if (renting.getVehicle().getTypeOfVehicle().equals(tov)) {
-                        found = true;
-                        break;
+        List<Client> allClients = getAllClients();
+        List<Client> matchingClients = allClients.stream()
+                .filter(client -> (firstname.isEmpty() || client.getFirstName().contains(firstname)))
+                .filter(client -> (lastname.isEmpty() || client.getLastName().contains(lastname)))
+                .filter(client -> {
+                    try {
+                        return (tov == null || hasRentingWithType(client, tov));
+                    } catch (Exception e) {
+                        System.out.println(e.getMessage());
+                        return false;
                     }
-                }
-                if (!found) {
-                    match = false;
-                }
-            }
-            if (match) {
-                matchingClients.add(client);
-            }
-        }
+                })
+                .collect(Collectors.toList());
 
         return matchingClients;
+    }
+
+    private boolean hasRentingWithType(Client client, TypeOfVehicle tov) throws Exception {
+        List<Renting> clientRentings = getClientRentings(client);
+        return clientRentings.stream()
+                .anyMatch(renting -> renting.getVehicle().getTypeOfVehicle().equals(tov));
     }
 
     public List<Renting> getClientRentings(Client client) throws Exception {
@@ -238,8 +232,8 @@ public class Controller {
         }
     }
 
-    public List<PriceListItem> getPriceListItems(TypeOfVehicle tov) throws Exception {
-        Request request = new Request(Operation.GET_PRICE_LIST_ITEMS, tov);
+    public List<PriceListItem> getPriceListItems(TypeOfVehicle tov, Date dateFrom) throws Exception {
+        Request request = new Request(Operation.GET_PRICE_LIST_ITEMS, tov, dateFrom);
         sender.send(request);
         Response response = (Response) receiver.receive();
         if (response.getException() == null) {
@@ -249,14 +243,14 @@ public class Controller {
         }
     }
 
-    public BigDecimal getTotalAmount(Date dateFrom, Date dateTo, TypeOfPriceListItem type, BigDecimal price) {
+    public BigDecimal getTotalAmount(Date dateFrom, Date dateTo, TypeOfPriceListItem type, BigDecimal price, int numberOfHours) {
         long diff = dateTo.getTime() - dateFrom.getTime();
         long duration = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS) + 1;
         switch (type.toString()) {
             case "PERDAY":
                 return price.multiply(new BigDecimal(duration));
             case "PERHOUR":
-                return price.multiply(new BigDecimal(duration)).multiply(new BigDecimal(24));
+                return price.multiply(new BigDecimal(duration)).multiply(new BigDecimal(numberOfHours));
             default:
                 throw new AssertionError();
         }
@@ -310,5 +304,10 @@ public class Controller {
         if (response.getException() != null) {
             throw response.getException();
         }
+    }
+
+    public void closeLoginForm() throws Exception {
+        Request request = new Request(Operation.STOP_CLIENT_THREAD);
+        sender.send(request);
     }
 }

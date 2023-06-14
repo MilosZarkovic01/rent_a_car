@@ -15,6 +15,7 @@ public class Request implements Serializable {
 
     private Operation operation;
     private Object data;
+    private Object data2;
 
     public Request() {
     }
@@ -26,6 +27,12 @@ public class Request implements Serializable {
 
     public Request(Operation operation) {
         this.operation = operation;
+    }
+
+    public Request(Operation operation, Object data, Object data2) {
+        this.operation = operation;
+        this.data = data;
+        this.data2 = data2;
     }
 
     public Operation getOperation() {
@@ -44,4 +51,7 @@ public class Request implements Serializable {
         this.data = data;
     }
 
+    public Object getData2() {
+        return data2;
+    }
 }

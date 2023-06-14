@@ -26,5 +26,6 @@ public enum Operation {
     ADD_RENTING,
     DELETE_RENTING,
     GET_ALL_PDVS,
-    ADD_PRICE_LIST;
+    ADD_PRICE_LIST,
+    STOP_CLIENT_THREAD;
 }
