@@ -27,15 +27,15 @@ public class PriceListItemDaoImpl implements PriceListItemDao {
     @Override
     public List<PriceListItem> getPriceListItems(TypeOfVehicle tov, Date dateFrom) throws Exception {
         List<PriceListItem> priceListItems = new ArrayList<>();
-        
+
         Connection connection = DBConnectionFactory.getInstance().getConnection();
-        
+
         String maxPriceListQuery = "SELECT * "
                 + "FROM pricelist "
                 + "WHERE dateFrom <= ? "
                 + "ORDER BY dateFrom DESC "
                 + "LIMIT 1";
-        
+
         PreparedStatement maxPriceListStatement = connection.prepareStatement(maxPriceListQuery);
         maxPriceListStatement.setDate(1, new java.sql.Date(dateFrom.getTime()));
         ResultSet maxPriceListResult = maxPriceListStatement.executeQuery();
@@ -85,6 +85,28 @@ public class PriceListItemDaoImpl implements PriceListItemDao {
         preparedStatement.close();
         connection.close();
         return priceListItems;
+    }
+
+    @Override
+    public void savePriceListItem(PriceListItem item) throws Exception {
+        try {
+            Connection connection = DBConnectionFactory.getInstance().getConnection();
+            String query = "INSERT INTO pricelistitem(price, typeOfPriceListItem, currency, pdv_fk, typeOfVehicle_fk, priceList_id) VALUES (?, ?, ?, ?, ?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            preparedStatement.setDouble(1, item.getPrice().doubleValue());
+            preparedStatement.setString(2, item.getTypeOfPriceListItem().toString());
+            preparedStatement.setString(3, item.getCurrency().toString());
+            preparedStatement.setLong(4, item.getPdv().getId());
+            preparedStatement.setLong(5, item.getTypeOfVehicle().getId());
+            preparedStatement.setLong(6, item.getPriceList().getId());
+            preparedStatement.executeUpdate();
+
+            preparedStatement.close();
+            connection.commit();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            throw ex;
+        }
     }
 
 }

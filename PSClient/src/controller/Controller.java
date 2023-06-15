@@ -310,4 +310,13 @@ public class Controller {
         Request request = new Request(Operation.STOP_CLIENT_THREAD);
         sender.send(request);
     }
+
+    public void updateRenting(Long id, BigDecimal newPrice) throws Exception {
+        Request request = new Request(Operation.UPDATE_RENTING, id, newPrice);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() != null) {
+            throw response.getException();
+        }
+    }
 }

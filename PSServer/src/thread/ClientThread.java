@@ -16,6 +16,7 @@ import domain.PriceList;
 import domain.Renting;
 import domain.TypeOfVehicle;
 import domain.Vehicle;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
@@ -108,11 +109,14 @@ public class ClientThread extends Thread {
                             case DELETE_RENTING:
                                 Controller.getInstance().deleteRenting((Renting) request.getData());
                                 break;
+                            case UPDATE_RENTING:
+                                Controller.getInstance().updateRenting((Long) request.getData(), (BigDecimal) request.getData2());
+                                break;
                             case GET_ALL_PDVS:
                                 response.setResult(Controller.getInstance().getAllPDVs());
                                 break;
                             case ADD_PRICE_LIST:
-                                Controller.getInstance().addPriceList((PriceList) request.getData());
+                                Controller.getInstance().savePriceList((PriceList) request.getData());
                                 break;
                             case STOP_CLIENT_THREAD:
                                 setSignal(false);

@@ -83,13 +83,14 @@ CREATE TABLE `pricelist` (
   `dateFrom` date NOT NULL,
   `dateTo` date NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `pricelist` */
 
 insert  into `pricelist`(`id`,`dateFrom`,`dateTo`) values 
 (3,'2023-06-01','2023-07-01'),
-(4,'2023-07-01','2023-09-01');
+(4,'2023-07-01','2023-09-01'),
+(5,'2023-09-01','2023-12-01');
 
 /*Table structure for table `pricelistitem` */
 
@@ -110,7 +111,7 @@ CREATE TABLE `pricelistitem` (
   CONSTRAINT `pricelistitem_ibfk_5` FOREIGN KEY (`priceList_id`) REFERENCES `pricelist` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `pricelistitem_ibfk_6` FOREIGN KEY (`pdv_fk`) REFERENCES `pdv` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `pricelistitem_ibfk_7` FOREIGN KEY (`typeOfVehicle_fk`) REFERENCES `typeofvehicle` (`id`) ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `pricelistitem` */
 
@@ -123,7 +124,8 @@ insert  into `pricelistitem`(`id`,`price`,`typeOfPriceListItem`,`currency`,`pdv_
 (10,15930,'PERDAY','RSD',1,1,4),
 (11,48,'PERHOUR','EUR',2,2,4),
 (12,13200,'PERDAY','RSD',3,3,4),
-(13,177,'PERDAY','EUR',1,1,4);
+(13,177,'PERDAY','EUR',1,1,4),
+(14,5940,'PERDAY','RSD',3,2,5);
 
 /*Table structure for table `renting` */
 
@@ -150,10 +152,9 @@ CREATE TABLE `renting` (
 /*Data for the table `renting` */
 
 insert  into `renting`(`id`,`dateFrom`,`dateTo`,`totalAmount`,`currency`,`vehicle_fk`,`client_fk`,`priceListItem_fk`) values 
-(2,'2023-06-12','2023-06-14',378,'EUR',1,1,6),
-(3,'2023-06-11','2023-06-13',71280,'RSD',4,1,9),
-(5,'2023-06-17','2023-06-21',88500,'RSD',3,5,8),
-(6,'2023-07-10','2023-07-18',1593,'EUR',10,7,13),
+(2,'2023-06-12','2023-06-14',1550,'EUR',1,1,6),
+(3,'2023-06-11','2023-06-13',72500,'RSD',4,1,9),
+(6,'2023-07-10','2023-07-18',450,'EUR',10,7,13),
 (7,'2023-07-01','2023-07-06',576,'EUR',3,4,11);
 
 /*Table structure for table `typeofvehicle` */
@@ -193,7 +194,7 @@ CREATE TABLE `vehicle` (
 
 insert  into `vehicle`(`id`,`brand`,`model`,`mileage`,`availability`,`typeOfVehicle_fk`) values 
 (1,'Mercedes-Benz','Maybach',88000,0,1),
-(3,'Suzuki','Hayabusa',17000,0,2),
+(3,'Suzuki','Hayabusa',17000,1,2),
 (4,'Honda','Ridgeline',112000,0,3),
 (5,'Toyota','Tundra',9000,0,3),
 (8,'Audi','A5',88000,0,1),

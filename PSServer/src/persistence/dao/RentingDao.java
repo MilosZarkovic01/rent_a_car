@@ -5,6 +5,7 @@
 package persistence.dao;
 
 import domain.Renting;
+import java.math.BigDecimal;
 import java.util.List;
 
 /**
@@ -15,4 +16,5 @@ public interface RentingDao {
     List<Renting> getAll() throws Exception;
     void add (Renting renting) throws Exception;
     void delete(Renting renting) throws Exception;
+    void updatePrice(Long id, BigDecimal newPrice) throws Exception;
 }

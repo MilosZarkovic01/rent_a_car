@@ -14,5 +14,7 @@ import java.util.List;
  * @author Somika
  */
 public interface PriceListItemDao {
-    List<PriceListItem> getPriceListItems(TypeOfVehicle tov,Date dateFrom) throws Exception;
+
+    List<PriceListItem> getPriceListItems(TypeOfVehicle tov, Date dateFrom) throws Exception;
+    void savePriceListItem(PriceListItem item) throws Exception;
 }

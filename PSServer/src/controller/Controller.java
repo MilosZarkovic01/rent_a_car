@@ -12,6 +12,7 @@ import domain.PriceListItem;
 import domain.Renting;
 import domain.TypeOfVehicle;
 import domain.Vehicle;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -180,7 +181,23 @@ public class Controller {
         return repositoryPDV.getAll();
     }
 
-    public void addPriceList(PriceList pl) throws Exception {
-        repositoryPriceList.add(pl);
+    public void savePriceList(PriceList pl) throws Exception {
+        Long priceListId = repositoryPriceList.save(pl);
+        pl.setId(priceListId);
+
+        List<PriceListItem> priceListItems = pl.getPriceListItems();
+
+        for (PriceListItem item : priceListItems) {
+            item.setPriceList(pl);
+            savePriceListItem(item);
+        }
+    }
+
+    public void savePriceListItem(PriceListItem item) throws Exception {
+        repositoryPriceListItem.savePriceListItem(item);
+    }
+
+    public void updateRenting(Long id, BigDecimal newPrice) throws Exception {
+        repositoryRenting.updatePrice(id, newPrice);
     }
 }

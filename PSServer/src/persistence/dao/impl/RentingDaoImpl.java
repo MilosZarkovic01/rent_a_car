@@ -128,4 +128,20 @@ public class RentingDaoImpl implements RentingDao {
         connection.close();
     }
 
+    @Override
+    public void updatePrice(Long id, BigDecimal newPrice) throws Exception {
+        String query = "UPDATE renting SET totalAmount = ? WHERE id = ?";
+
+        Connection connection = DBConnectionFactory.getInstance().getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(query);
+        preparedStatement.setBigDecimal(1, newPrice);
+        preparedStatement.setLong(2, id);
+
+        preparedStatement.executeUpdate();
+
+        connection.commit();
+        preparedStatement.close();
+        connection.close();
+
+    }
 }

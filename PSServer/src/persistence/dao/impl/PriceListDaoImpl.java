@@ -5,50 +5,42 @@
 package persistence.dao.impl;
 
 import domain.PriceList;
-import domain.PriceListItem;
 import java.sql.*;
 import repository.conn.DBConnectionFactory;
 import persistence.dao.PriceListDao;
+
 /**
  *
  * @author Somika
  */
-public class PriceListDaoImpl implements PriceListDao{
+public class PriceListDaoImpl implements PriceListDao {
 
     @Override
-    public void add(PriceList pl) throws Exception {
-         try {
+    public Long save(PriceList pl) throws Exception {
+        Long priceListId = null;
+        try {
             Connection connection = DBConnectionFactory.getInstance().getConnection();
-            String query = "INSERT INTO pricelist(dateFrom,dateTo) VALUES (?,?)";
-            PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-            statement.setDate(1, Date.valueOf(pl.getDateFrom()));
-            statement.setDate(2, Date.valueOf(pl.getDateTo()));
-            statement.executeUpdate();
-            ResultSet rs = statement.getGeneratedKeys();
+            String query = "INSERT INTO pricelist(dateFrom, dateTo) VALUES (?, ?)";
+            PreparedStatement preparedStatement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setDate(1, Date.valueOf(pl.getDateFrom()));
+            preparedStatement.setDate(2, Date.valueOf(pl.getDateTo()));
+            preparedStatement.executeUpdate();
+
+            ResultSet rs = preparedStatement.getGeneratedKeys();
             if (rs.next()) {
-                Long id = rs.getLong(1);
-                pl.setId(id);
-                query = "INSERT INTO pricelistitem(price, typeOfPriceListItem, currency, pdv_fk, typeOfVehicle_fk, priceList_id) VALUES (?,?,?,?,?,?)";
-                statement = connection.prepareStatement(query);
-                for (PriceListItem item : pl.getPriceListItems()) {
-                    statement.setDouble(1, item.getPrice().doubleValue());
-                    statement.setString(2, item.getTypeOfPriceListItem().toString());
-                    statement.setString(3, item.getCurrency().toString());
-                    statement.setLong(4, item.getPdv().getId());
-                    statement.setLong(5, item.getTypeOfVehicle().getId());
-                    statement.setLong(6, pl.getId());
-                    statement.executeUpdate();
-                }
+                priceListId = rs.getLong(1);
             } else {
                 throw new Exception("PriceList id is not generated!");
             }
+
             rs.close();
-            statement.close();
+            preparedStatement.close();
             connection.commit();
+            connection.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
             throw ex;
         }
+        return priceListId;
     }
-    
 }

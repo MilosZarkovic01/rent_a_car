@@ -11,5 +11,5 @@ import domain.PriceList;
  * @author Somika
  */
 public interface PriceListDao {
-    void add(PriceList pl) throws Exception;
+    Long save(PriceList pl) throws Exception;
 }
