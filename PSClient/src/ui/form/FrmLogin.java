@@ -176,12 +176,14 @@ public class FrmLogin extends javax.swing.JFrame {
                 resetForm();
                 return;
             }
-            Session.getInstance().setAdministrator(administrator);
+            Session.getInstance().setAttribute("admin", administrator);
             JOptionPane.showMessageDialog(this, "Login success. Welcome " + administrator.getUsername());
-            new FrmMain().setVisible(true);
+            FrmMain mainForm = new FrmMain();
+            Controller.getInstance().setMainForm(mainForm);
+            mainForm.setVisible(true);
             this.dispose();
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, ex.getMessage());
+            JOptionPane.showMessageDialog(this, "Server not working, exit and try again later!", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

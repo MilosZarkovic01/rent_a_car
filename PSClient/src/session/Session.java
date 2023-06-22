@@ -4,7 +4,8 @@
  */
 package session;
 
-import domain.Administrator;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -13,9 +14,10 @@ import domain.Administrator;
 public class Session {
 
     private static Session instance;
-    private Administrator administrator;
+    private final Map<String, Object> sessionData;
 
     private Session() {
+        sessionData = new HashMap<>();
     }
 
     public static Session getInstance() {
@@ -25,11 +27,19 @@ public class Session {
         return instance;
     }
 
-    public Administrator getAdministrator() {
-        return administrator;
+    public void setAttribute(String key, Object value) {
+        sessionData.put(key, value);
     }
 
-    public void setAdministrator(Administrator administrator) {
-        this.administrator = administrator;
+    public Object getAttribute(String key) {
+        return sessionData.get(key);
+    }
+
+    public void removeAttribute(String key) {
+        sessionData.remove(key);
+    }
+
+    public void clear() {
+        sessionData.clear();
     }
 }

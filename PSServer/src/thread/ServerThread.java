@@ -20,9 +20,9 @@ import settings.ConnectionConfig;
  */
 public class ServerThread extends Thread {
 
-    private ServerSocket serverSocket;
+    private final ServerSocket serverSocket;
     private List<ClientThread> clients;
-    boolean serverRunning;
+    private boolean serverRunning;
 
     public ServerThread() throws IOException {
         this.serverRunning = true;

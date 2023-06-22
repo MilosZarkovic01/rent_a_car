@@ -28,8 +28,10 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import javax.swing.JOptionPane;
 import session.Session;
 import settings.ConnectionConfig;
+import ui.form.FrmMain;
 
 /**
  *
@@ -41,6 +43,7 @@ public class Controller {
     private Sender sender;
     private Recеiver receiver;
     private static Controller instance;
+    private FrmMain mainForm;
 
     private Controller() {
         try {
@@ -57,6 +60,10 @@ public class Controller {
             instance = new Controller();
         }
         return instance;
+    }
+
+    public void setMainForm(FrmMain mainForm) {
+        this.mainForm = mainForm;
     }
 
     public Administrator login(String username, String password) throws Exception {
@@ -79,110 +86,157 @@ public class Controller {
     }
 
     public void logout() throws Exception {
-        Administrator admin = Session.getInstance().getAdministrator();
-        Request request = new Request(Operation.LOG_OUT, admin);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() != null) {
-            throw response.getException();
-        }
-    }
-
-    public List<Vehicle> getAllVehicles() throws Exception {
-        Request request = new Request(Operation.GET_ALL_VEHICLES);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() == null) {
-            return (List<Vehicle>) response.getResult();
-        } else {
-            return null;
-        }
-    }
-
-    public List<Vehicle> getAvailableVehicle() throws Exception {
-        Request request = new Request(Operation.GET_AVAILABLE_VEHICLES);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() == null) {
-            return (List<Vehicle>) response.getResult();
-        } else {
-            return null;
-        }
-    }
-
-    public List<TypeOfVehicle> getAllTypes() throws Exception {
-        Request request = new Request(Operation.GET_ALL_TYPES);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() == null) {
-            return (List<TypeOfVehicle>) response.getResult();
-        } else {
-            return null;
+        try {
+            Administrator admin = (Administrator) Session.getInstance().getAttribute("admin");
+            Request request = new Request(Operation.LOG_OUT, admin);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() != null) {
+                throw response.getException();
+            }
+        } catch (Exception e) {
         }
 
     }
 
-    public boolean updateVehicle(Vehicle inputData) throws Exception {
-        Request request = new Request(Operation.UPDATE_VEHICLE, inputData);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() != null) {
-            throw response.getException();
-        } else {
-            return true;
+    public List<Vehicle> getAllVehicles() {
+        try {
+            Request request = new Request(Operation.GET_ALL_VEHICLES);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() == null) {
+                return (List<Vehicle>) response.getResult();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        return null;
     }
 
-    public boolean deleteVehicle(Vehicle vehicle) throws Exception {
-        Request request = new Request(Operation.DELETE_VEHICLE, vehicle);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() != null) {
-            throw response.getException();
-        } else {
-            return true;
+    public List<Vehicle> getAvailableVehicle() {
+        try {
+            Request request = new Request(Operation.GET_AVAILABLE_VEHICLES);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() == null) {
+                return (List<Vehicle>) response.getResult();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        return null;
     }
 
-    public boolean saveVehicle(Vehicle inputData) throws Exception {
-        Request request = new Request(Operation.ADD_VEHICLE, inputData);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() != null) {
-            throw response.getException();
-        } else {
-            return true;
+    public List<TypeOfVehicle> getAllTypes() {
+        try {
+            Request request = new Request(Operation.GET_ALL_TYPES);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() == null) {
+                return (List<TypeOfVehicle>) response.getResult();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        return null;
     }
 
-    public List<Client> getAllClients() throws Exception {
-        Request request = new Request(Operation.GET_ALL_CLIENTS);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() == null) {
-            return (List<Client>) response.getResult();
-        } else {
-            return null;
+    public boolean updateVehicle(Vehicle inputData) {
+        try {
+            Request request = new Request(Operation.UPDATE_VEHICLE, inputData);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() != null) {
+                throw response.getException();
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        return false;
     }
 
-    public boolean updateClient(Client client) throws Exception {
-        Request request = new Request(Operation.UPDATE_CLIENT, client);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() != null) {
-            throw response.getException();
-        } else {
-            return true;
+    public boolean deleteVehicle(Vehicle vehicle) {
+        try {
+            Request request = new Request(Operation.DELETE_VEHICLE, vehicle);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() != null) {
+                throw response.getException();
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        return false;
     }
 
-    public void addClient(Client client) throws Exception {
-        Request request = new Request(Operation.ADD_CLIENT, client);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() != null) {
-            throw response.getException();
+    public boolean saveVehicle(Vehicle inputData) {
+        try {
+            Request request = new Request(Operation.ADD_VEHICLE, inputData);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() != null) {
+                throw response.getException();
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        return false;
+    }
+
+    public List<Client> getAllClients() {
+        try {
+            Request request = new Request(Operation.GET_ALL_CLIENTS);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() == null) {
+                return (List<Client>) response.getResult();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        return null;
+    }
+
+    public boolean updateClient(Client client) {
+        try {
+            Request request = new Request(Operation.UPDATE_CLIENT, client);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() != null) {
+                throw response.getException();
+            } else {
+                return true;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
+        }
+        return false;
+    }
+
+    public void addClient(Client client) {
+        try {
+            Request request = new Request(Operation.ADD_CLIENT, client);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() != null) {
+                throw response.getException();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -211,36 +265,51 @@ public class Controller {
     }
 
     public List<Renting> getClientRentings(Client client) throws Exception {
-        Request request = new Request(Operation.GET_CLIENT_RENTINGS, client);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() == null) {
-            return (List<Renting>) response.getResult();
-        } else {
-            return null;
+        try {
+            Request request = new Request(Operation.GET_CLIENT_RENTINGS, client);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() == null) {
+                return (List<Renting>) response.getResult();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        return null;
     }
 
-    public List<Renting> getAllRentings() throws Exception {
-        Request request = new Request(Operation.GET_ALL_RENTINGS);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() == null) {
-            return (List<Renting>) response.getResult();
-        } else {
-            return null;
+    public List<Renting> getAllRentings() {
+        try {
+            Request request = new Request(Operation.GET_ALL_RENTINGS);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() == null) {
+                return (List<Renting>) response.getResult();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        return null;
     }
 
-    public List<PriceListItem> getPriceListItems(TypeOfVehicle tov, Date dateFrom) throws Exception {
-        Request request = new Request(Operation.GET_PRICE_LIST_ITEMS, tov, dateFrom);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() == null) {
-            return (List<PriceListItem>) response.getResult();
-        } else {
-            return null;
+    public List<PriceListItem> getPriceListItems(TypeOfVehicle tov, Date dateFrom) {
+        try {
+            Request request = new Request(Operation.GET_PRICE_LIST_ITEMS, tov, dateFrom);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() == null) {
+                return (List<PriceListItem>) response.getResult();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        return null;
     }
 
     public BigDecimal getTotalAmount(Date dateFrom, Date dateTo, TypeOfPriceListItem type, BigDecimal price, int numberOfHours) {
@@ -256,21 +325,29 @@ public class Controller {
         }
     }
 
-    public void addRenting(Renting renting) throws Exception {
-        Request request = new Request(Operation.ADD_RENTING, renting);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() != null) {
-            throw response.getException();
+    public void addRenting(Renting renting) {
+        try {
+            Request request = new Request(Operation.ADD_RENTING, renting);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() != null) {
+                throw response.getException();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 
-    public void deleteRenting(Renting renting) throws Exception {
-        Request request = new Request(Operation.DELETE_RENTING, renting);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() != null) {
-            throw response.getException();
+    public void deleteRenting(Renting renting) {
+        try {
+            Request request = new Request(Operation.DELETE_RENTING, renting);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() != null) {
+                throw response.getException();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -286,23 +363,32 @@ public class Controller {
         }
     }
 
-    public List<PDV> getAllPDVs() throws Exception {
-        Request request = new Request(Operation.GET_ALL_PDVS);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() == null) {
-            return (List<PDV>) response.getResult();
-        } else {
-            return null;
+    public List<PDV> getAllPDVs() {
+        try {
+            Request request = new Request(Operation.GET_ALL_PDVS);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() == null) {
+                return (List<PDV>) response.getResult();
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
+        return null;
     }
 
-    public void addPriceList(PriceList pl) throws Exception {
-        Request request = new Request(Operation.ADD_PRICE_LIST, pl);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() != null) {
-            throw response.getException();
+    public void addPriceList(PriceList pl) {
+        try {
+            Request request = new Request(Operation.ADD_PRICE_LIST, pl);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() != null) {
+                throw response.getException();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 
@@ -311,12 +397,16 @@ public class Controller {
         sender.send(request);
     }
 
-    public void updateRenting(Long id, BigDecimal newPrice) throws Exception {
-        Request request = new Request(Operation.UPDATE_RENTING, id, newPrice);
-        sender.send(request);
-        Response response = (Response) receiver.receive();
-        if (response.getException() != null) {
-            throw response.getException();
+    public void updateRenting(Long id, BigDecimal newPrice) {
+        try {
+            Request request = new Request(Operation.UPDATE_RENTING, id, newPrice);
+            sender.send(request);
+            Response response = (Response) receiver.receive();
+            if (response.getException() != null) {
+                throw response.getException();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
         }
     }
 }
