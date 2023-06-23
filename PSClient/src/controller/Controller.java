@@ -163,20 +163,15 @@ public class Controller {
         return false;
     }
 
-    public boolean deleteVehicle(Vehicle vehicle) {
-        try {
-            Request request = new Request(Operation.DELETE_VEHICLE, vehicle);
-            sender.send(request);
-            Response response = (Response) receiver.receive();
-            if (response.getException() != null) {
-                throw response.getException();
-            } else {
-                return true;
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(mainForm, "Server stopped, try again later!", "Warning", JOptionPane.WARNING_MESSAGE);
+    public boolean deleteVehicle(Vehicle vehicle) throws Exception {
+        Request request = new Request(Operation.DELETE_VEHICLE, vehicle);
+        sender.send(request);
+        Response response = (Response) receiver.receive();
+        if (response.getException() != null) {
+            throw response.getException();
+        } else {
+            return true;
         }
-        return false;
     }
 
     public boolean saveVehicle(Vehicle inputData) {
